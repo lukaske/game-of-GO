@@ -1,4 +1,4 @@
-# Programiranje 2 - Zaključni projekt
+# Programiranje 2: Zaključni projekt
 
 Repozitorij vsebuje kodo za zaključni projekt pri predmetu Programiranje 2 na Fakulteti za matematiko in fiziko. V okviru zaključnega projekta bomo izdelali: 
 
