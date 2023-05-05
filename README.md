@@ -11,4 +11,4 @@ Repozitorij vsebuje kodo za zaključni projekt pri predmetu Programiranje 2 na F
 
 # Avtorji
 
-- [Luka Skeledžija](https://github.com/lukaske)
+[Luka Skeledžija](https://github.com/lukaske)
