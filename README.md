@@ -8,3 +8,7 @@ Repozitorij vsebuje kodo za zaključni projekt pri predmetu Programiranje 2 na F
 # Tehnologije:
 
 - Java, paket [Java Swing](https://docs.oracle.com/javase/tutorial/uiswing/start/index.html)
+
+# Avtorji
+
+- [Luka Skeledžija](https://github.com/lukaske)
