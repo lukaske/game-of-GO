@@ -55,7 +55,7 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
 
         // Draw stones
 
-        int stoneSize = cellWidth - 10;
+        int stoneSize = cellWidth - 20;
         for (Point p : blackStones) {
             g.setColor(Color.BLACK);
             g.fillOval(p.x - (stoneSize / 2), p.y - (stoneSize / 2), stoneSize, stoneSize);
@@ -83,6 +83,15 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
 
     @Override
     public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
         int x_mouse = e.getX();
         int smallest_dist_x = width;
         int smallest_x_index = -1;
@@ -126,16 +135,6 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
 
             }
         }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
     }
 
     @Override
