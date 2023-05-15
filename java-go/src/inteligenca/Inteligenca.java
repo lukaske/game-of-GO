@@ -10,6 +10,7 @@ public class Inteligenca extends splosno.KdoIgra {
 
     public Poteza izberiPotezo(Igra igra){
         // make an intelligent move based on Igra
+        return new Poteza(0, 0);
     }
 
 }
