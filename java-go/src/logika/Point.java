@@ -1,13 +1,16 @@
-package gui;
+package logika;
 
 import java.util.Objects;
 
 public class Point {
     public int x,y;
+    public int ix, iy; // Index on 9x9 board
 
-    public Point(int x, int y) {
+    public Point(int x, int y, int ix, int iy) {
         this.x = x;
         this.y = y;
+        this.ix = ix;
+        this.iy = iy;
     }
 
     @Override

@@ -1,9 +1,10 @@
 package gui;
 
+import logika.Point;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,8 +13,8 @@ import static java.lang.Math.abs;
 public class GoBoard extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 
     int width, height, padding, innerWidth, innerHeight, cellWidth, cellHeight;
-    Set<Point> blackStones = new HashSet<>();
-    Set<Point> whiteStones = new HashSet<>();
+    Set<logika.Point> blackStones = new HashSet<>();
+    Set<logika.Point> whiteStones = new HashSet<>();
     boolean playerTurn = true; // true = black, false = white
 
     public GoBoard(int sirina, int visina) {
@@ -56,11 +57,11 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         // Draw stones
 
         int stoneSize = cellWidth - 20;
-        for (Point p : blackStones) {
+        for (logika.Point p : blackStones) {
             g.setColor(Color.BLACK);
             g.fillOval(p.x - (stoneSize / 2), p.y - (stoneSize / 2), stoneSize, stoneSize);
         }
-        for (Point p : whiteStones) {
+        for (logika.Point p : whiteStones) {
             g.setColor(Color.WHITE);
             g.fillOval(p.x - (stoneSize / 2), p.y - (stoneSize / 2), stoneSize, stoneSize);
         }
@@ -122,7 +123,9 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         }
 
         if (smallest_x_index != -1 && smallest_y_index != -1){
-            Point p = new Point(smallest_x_index, smallest_y_index);
+            int ix = smallest_x_index / (width - padding);
+            int iy = smallest_y_index / (height - padding);
+            logika.Point p = new Point(smallest_x_index, smallest_y_index, ix, iy);
             if (!whiteStones.contains(p) && !blackStones.contains(p)){
                 if (playerTurn) {
                     blackStones.add(p);
