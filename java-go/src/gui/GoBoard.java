@@ -4,9 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Platno extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
+public class GoBoard extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 
-    public Platno(int sirina, int visina) {
+    public GoBoard(int sirina, int visina) {
         super();
         setPreferredSize(new Dimension(sirina, visina));
         addMouseListener(this);

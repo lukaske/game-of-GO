@@ -10,19 +10,14 @@ import java.io.File;
 public class SplashEkran extends JPanel implements MouseListener, MouseMotionListener, KeyListener, ActionListener {
 
     private BufferedImage image;
+    private BufferedImage backgroundImage;
+
     private int sirina_slike = 500; // default
     private int visina_slike = 500; // default
 
-    private Color startColor;
-    private Color endColor;
-    private double hue;
-    private Timer timer;
-
-
-
     public SplashEkran(int sirina, int visina) {
         super();
-        setPreferredSize(new Dimension(sirina, visina));
+        setSize(new Dimension(sirina, visina));
         addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
@@ -32,75 +27,51 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
         visina_slike = visina - 300;
         sirina_slike = sirina - 300;
 
-        startColor = new Color(11, 36, 71);  // Dark blue
-        endColor = new Color(87, 108, 188);  // Pink
-        hue = 0;
-        timer = new Timer(20, this);  // Animation speed (milliseconds)
-        timer.start();
-
-
         try {
             // Load the PNG image from the file
-            File imageFile = new File("./assets/splash.png");
+            File imageFile = new File("./assets/splash2.png");
             System.out.println(imageFile.getAbsolutePath());
             image = ImageIO.read(imageFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //CustomButton button1 = new CustomButton("Capture Go", 100, 500);
-        //CustomButton button2 = new CustomButton("Traditional Go", 100, 100);
+        try {
+            // Load the PNG image from the file
+            File imageFile = new File("./assets/grid2.png");
+            System.out.println(imageFile.getAbsolutePath());
+            backgroundImage = ImageIO.read(imageFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        //add(button1);
-        //add(button2);
 
+        setLayout(null);
+
+        CustomButton playCaptureGo = new CustomButton("Play Capture GO", 50, 700);
+        CustomButton playTraditionalGo = new CustomButton("Play Traditional GO", 400, 700);
+        add(playCaptureGo);
+        add(playTraditionalGo);
+        setVisible(true);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Draw the image onto the panel
-        int width = getWidth();
-        int height = getHeight();
-
         int center_x_img = (this.getWidth() - sirina_slike) / 2;
         int center_y_img = (this.getHeight() - visina_slike) / 2;
 
-        // Calculate the current hue value
-        double hue = (Math.sin(System.currentTimeMillis() / 5000.0) + 1) / 2;
-
-
-        // Create a gradient from startColor to endColor based on hue
-        Color gradientColor = getGradientColor(startColor, endColor, (float) hue);
-
-        // Fill the panel with the gradient color
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setPaint(new GradientPaint(0, 0, gradientColor, width, height, gradientColor.darker()));
-        g2d.fillRect(0, 0, width, height);
-
+        g.drawImage(backgroundImage, 0, 0, 800, 800, null);
         g.drawImage(image, center_x_img, center_y_img, sirina_slike, visina_slike, null);
 
         Graphics2D g3d = (Graphics2D) g;
-        g3d.setColor(Color.WHITE);
+
+        g3d.setColor(Color.BLACK);
         g3d.setFont(new Font("SansSerif", Font.BOLD, 70));
-        g3d.drawString("GAME OF GO", 200, 300);
+        g3d.drawString("GAME OF GO", 175, 100);
 
-    }
-
-    private Color getGradientColor(Color startColor, Color endColor, float fraction) {
-        float[] startHsb = Color.RGBtoHSB(startColor.getRed(), startColor.getGreen(), startColor.getBlue(), null);
-        float[] endHsb = Color.RGBtoHSB(endColor.getRed(), endColor.getGreen(), endColor.getBlue(), null);
-
-        float hue = interpolate(startHsb[0], endHsb[0], fraction);
-        float saturation = interpolate(startHsb[1], endHsb[1], fraction);
-        float brightness = interpolate(startHsb[2], endHsb[2], fraction);
-
-        return Color.getHSBColor(hue, saturation, brightness);
-    }
-
-    private float interpolate(float startValue, float endValue, float fraction) {
-        return startValue + fraction * (endValue - startValue);
+        setBackground(Color.WHITE);
     }
 
 
@@ -158,4 +129,6 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
     public void actionPerformed(ActionEvent e) {
         repaint();
     }
+
+
 }

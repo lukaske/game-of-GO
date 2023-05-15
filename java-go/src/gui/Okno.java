@@ -11,7 +11,7 @@ public class Okno extends JFrame implements ActionListener{
     protected int visina = 800;
     protected CardLayout cardLayout;
     protected JPanel panel;
-    protected Platno platno;
+    protected GoBoard goBoard;
     protected SplashEkran splashEkran;
     boolean showSplashScreen = true;
 
@@ -21,18 +21,18 @@ public class Okno extends JFrame implements ActionListener{
     public Okno() {
         super(); // najprej pokličemo konstruktor JFrame, ki je nadrazred
         setTitle("Igraj GO!");
+        setResizable(false);
 
         CardLayout cardLayout = new CardLayout();
         JPanel panel = new JPanel(cardLayout);
         add(panel);
 
-        platno = new Platno(sirina, visina);
+        goBoard = new GoBoard(sirina, visina);
         splashEkran = new SplashEkran(sirina, visina);
-        panel.add("capture-go", platno);
+        panel.add("capture-go", goBoard);
         panel.add("splash-ekran", splashEkran);
 
         cardLayout.show(panel, "splash-ekran");
-
 
         JMenuBar menubar = new JMenuBar();
         setJMenuBar(menubar);
