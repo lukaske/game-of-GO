@@ -15,6 +15,8 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
     private int sirina_slike = 500; // default
     private int visina_slike = 500; // default
 
+
+
     public SplashEkran(int sirina, int visina) {
         super();
         setSize(new Dimension(sirina, visina));
@@ -53,6 +55,18 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
         add(playCaptureGo);
         add(playTraditionalGo);
         setVisible(true);
+
+        playCaptureGo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Play Capture GO");
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(playCaptureGo);
+                frame.getContentPane().removeAll();
+                frame.getContentPane().add(new GoBoard(visina, sirina));
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
     }
 
     @Override
