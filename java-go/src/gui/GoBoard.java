@@ -1,6 +1,7 @@
 package gui;
 
 import logika.Point;
+import logika.PointType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,11 +60,11 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         int stoneSize = cellWidth - 20;
         for (logika.Point p : blackStones) {
             g.setColor(Color.BLACK);
-            g.fillOval(p.x - (stoneSize / 2), p.y - (stoneSize / 2), stoneSize, stoneSize);
+            g.fillOval(p.x_coord() - (stoneSize / 2), p.y_coord() - (stoneSize / 2), stoneSize, stoneSize);
         }
         for (logika.Point p : whiteStones) {
             g.setColor(Color.WHITE);
-            g.fillOval(p.x - (stoneSize / 2), p.y - (stoneSize / 2), stoneSize, stoneSize);
+            g.fillOval(p.x_coord() - (stoneSize / 2), p.y_coord() - (stoneSize / 2), stoneSize, stoneSize);
         }
     }
 
@@ -125,7 +126,10 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         if (smallest_x_index != -1 && smallest_y_index != -1){
             int ix = smallest_x_index / (width - padding);
             int iy = smallest_y_index / (height - padding);
-            logika.Point p = new Point(smallest_x_index, smallest_y_index, ix, iy);
+            PointType pt;
+            if (playerTurn) pt = PointType.BLACK;
+            else pt = PointType.WHITE;
+            logika.Point p = new Point(smallest_x_index, smallest_y_index, ix, iy, pt);
             if (!whiteStones.contains(p) && !blackStones.contains(p)){
                 if (playerTurn) {
                     blackStones.add(p);

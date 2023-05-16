@@ -14,7 +14,7 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
 
     private int sirina_slike = 500; // default
     private int visina_slike = 500; // default
-    private SplashEkran self_ref = this;
+    private final SplashEkran self_ref = this;
 
     public SplashEkran(int sirina, int visina) {
         super();
