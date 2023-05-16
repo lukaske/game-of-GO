@@ -8,6 +8,7 @@ import java.util.Set;
 public class Igra {
 
     Point[][] board = new Point[9][9];
+    boolean isBlack = true;
 
     public Igra(){
         // ustvari novo igro velikosti 9x9
@@ -20,6 +21,7 @@ public class Igra {
 
         randomlyFill();
         Set<PointGroup> groups = findAllGroups();
+
         System.out.println("All groups:" + groups.size());
         for (PointGroup pg : groups){
             if (pg.getLiberties() == 0){
@@ -72,16 +74,14 @@ public class Igra {
     }
 
     boolean odigraj(Poteza poteza){
-        boolean isPossible = true;
-        boolean isBlack = true;
-        PointType color;
-        if (isBlack) color = PointType.BLACK;
-        else color = PointType.WHITE;
-
+        boolean isPossible = board[poteza.x()][poteza.y()].type() == PointType.EMPTY;
         if (isPossible){
+            PointType color = isBlack ? PointType.BLACK : PointType.WHITE;
             Point p = new Point(0, 0, poteza.x(), poteza.y(), color);
             board[p.x()][p.y()] = p;
+            isBlack = !isBlack;
         }
+
         return isPossible;
     }
 
