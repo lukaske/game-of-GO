@@ -14,8 +14,7 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
 
     private int sirina_slike = 500; // default
     private int visina_slike = 500; // default
-
-
+    private SplashEkran self_ref = this;
 
     public SplashEkran(int sirina, int visina) {
         super();
@@ -32,7 +31,6 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
         try {
             // Load the PNG image from the file
             File imageFile = new File("./assets/splash2.png");
-            System.out.println(imageFile.getAbsolutePath());
             image = ImageIO.read(imageFile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,7 +39,6 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
         try {
             // Load the PNG image from the file
             File imageFile = new File("./assets/grid2.png");
-            System.out.println(imageFile.getAbsolutePath());
             backgroundImage = ImageIO.read(imageFile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,16 +53,11 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
         add(playTraditionalGo);
         setVisible(true);
 
-        playCaptureGo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Play Capture GO");
-                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(playCaptureGo);
-                frame.getContentPane().removeAll();
-                frame.getContentPane().add(new GoBoard(visina, sirina));
-                frame.revalidate();
-                frame.repaint();
-            }
+        playCaptureGo.addActionListener(e -> {
+            JPanel frame = (JPanel) self_ref.getParent();
+            CardLayout cardLayout = (CardLayout) frame.getLayout();
+            cardLayout.show(frame, "capture-go");
+            frame.repaint();
         });
     }
 

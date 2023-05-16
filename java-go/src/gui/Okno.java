@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 public class Okno extends JFrame implements ActionListener{
 
@@ -15,7 +18,8 @@ public class Okno extends JFrame implements ActionListener{
     protected SplashEkran splashEkran;
     boolean showSplashScreen = true;
 
-    private JMenuItem menuOdpri, menuShrani, menuKoncaj;
+    private JMenuItem navodilaGo, navodilaCaptureGo, gitHubLink;
+    private JMenuItem endGame;
 
 
     public Okno() {
@@ -23,8 +27,8 @@ public class Okno extends JFrame implements ActionListener{
         setTitle("Igraj GO!");
         setResizable(false);
 
-        CardLayout cardLayout = new CardLayout();
-        JPanel panel = new JPanel(cardLayout);
+        cardLayout = new CardLayout();
+        panel = new JPanel(cardLayout);
         add(panel);
 
         goBoard = new GoBoard(sirina, visina);
@@ -37,9 +41,17 @@ public class Okno extends JFrame implements ActionListener{
         JMenuBar menubar = new JMenuBar();
         setJMenuBar(menubar);
 
-        JMenu menuIgra = dodajMenu(menubar, "Igra");
-        JMenu menuNastavitve = dodajMenu(menubar, "Nastavitve");
-        JMenu menuOProgramu = dodajMenu(menubar, "O programu");
+        JMenu menuIgra = dodajMenu(menubar, "Game");
+        endGame = dodajMenuItem(menuIgra, "Exit to main menu");
+
+
+        JMenu menuNastavitve = dodajMenu(menubar, "Settings");
+
+        JMenu menuOProgramu = dodajMenu(menubar, "About");
+        navodilaCaptureGo = dodajMenuItem(menuOProgramu, "How to play Capture Go");
+        navodilaGo = dodajMenuItem(menuOProgramu, "How to play Traditional Go");
+        gitHubLink = dodajMenuItem(menuOProgramu, "Open on GitHub");
+
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -62,6 +74,42 @@ public class Okno extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         Object objekt = e.getSource();
+        if (objekt == navodilaCaptureGo) {
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    File myFile = new File("./assets/capturego.pdf");
+                    Desktop.getDesktop().open(myFile);
+                } catch (IOException ex) {
+                    // no application registered for PDFs
+                }
+            }
+
+        }
+        else if (objekt == navodilaGo) {
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    File myFile = new File("./assets/go.pdf");
+                    Desktop.getDesktop().open(myFile);
+                } catch (IOException ex) {
+                    // no application registered for PDFs
+                }
+            }
+        }
+        else if (objekt == gitHubLink) {
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    Desktop.getDesktop().browse(new URL("https://github.com/lukaske/programiranje2-projekt").toURI());
+                } catch (Exception ex) {}
+            }
+        }
+        else if (objekt == endGame) {
+            System.out.println(panel.getComponentCount());
+            cardLayout.show(panel, "splash-ekran");
+            panel.revalidate();
+            panel.repaint();
+        }
+
+
     }
 
     // Meant for testing
@@ -69,6 +117,16 @@ public class Okno extends JFrame implements ActionListener{
         Okno okno = new Okno();
         okno.pack();
         okno.setVisible(true);
+    }
+
+    public void changeView(String viewName) {
+        try{
+            cardLayout.show(panel, viewName);
+            panel.revalidate();
+            panel.repaint();
+        } catch (Exception e) {
+            System.out.println("View does not exist");
+        }
     }
 
 }
