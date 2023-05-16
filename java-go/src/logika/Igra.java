@@ -7,7 +7,6 @@ import java.util.Set;
 
 public class Igra {
 
-    // Black is 1, White is 2, Empty is 0
     Point[][] board = new Point[9][9];
 
     public Igra(){
@@ -20,16 +19,31 @@ public class Igra {
         }
 
         randomlyFill();
+        Set<PointGroup> groups = findAllGroups();
+        System.out.println("All groups:" + groups.size());
+        for (PointGroup pg : groups){
+            if (pg.getLiberties() == 0){
+                System.out.println("Group with no liberties:");
+                pg.printGroupOnBoard();
+            }
+        }
+    }
 
-
-        Set<Point> group1 = getGroup(board[0][0], new HashSet<Point>());
-        Set<Point> group2 = getGroup(board[5][4], new HashSet<Point>());
-        Set<Point> group3 = getGroup(board[8][1], new HashSet<Point>());
-
-        AsciiGridDisplay.printBoard(board, group1);
-        AsciiGridDisplay.printBoard(board, group2);
-        AsciiGridDisplay.printBoard(board, group3);
-
+    private Set<PointGroup> findAllGroups(){
+        // Finds all groups on the board
+        // Returns a set of PointGroups
+        Set<PointGroup> groups = new HashSet<>();
+        Set<Point> visitedPoints = new HashSet<>();
+        for (Point[] row : board){
+            for (Point p : row){
+                if (p.type() != PointType.EMPTY && !visitedPoints.contains(p)){
+                    PointGroup pg = new PointGroup(board, p);
+                    groups.add(pg);
+                    visitedPoints.addAll(pg.getGroup());
+                }
+            }
+        }
+        return groups;
     }
 
     private Set<Point> getGroup(Point p, Set<Point> existing_group){
@@ -75,8 +89,10 @@ public class Igra {
         for (int i = 0; i < 9; i++){
             for (int j = 0; j < 9; j++) {
                 PointType pt;
-                if (Math.random() < 0.5) pt = PointType.BLACK;
-                else pt = PointType.WHITE;
+                double rand = Math.random();
+                if (rand <= 0.3) pt = PointType.BLACK;
+                else if (rand <= 0.66) pt = PointType.WHITE;
+                else pt = PointType.EMPTY;
                 board[i][j] = new Point(0, 0, i, j, pt);
             }
         }
