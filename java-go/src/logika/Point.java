@@ -12,7 +12,7 @@ public class Point {
 
     // isBlack is true if the point is black, false if the point is white
 
-    int x_coord, y_coord, x, y;
+    private int x_coord, y_coord, x, y;
     PointType type;
 
     public Point(int x_coord, int y_coord, int x, int y, PointType type){
@@ -25,6 +25,16 @@ public class Point {
 
     public int x_coord(){
         return x_coord;
+    }
+
+    public int set_x_coord(int x_coord){
+        this.x_coord = x_coord;
+        return this.x_coord;
+    }
+
+    public int set_y_coord(int y_coord){
+        this.y_coord = y_coord;
+        return this.y_coord;
     }
 
     public int y_coord(){
@@ -41,6 +51,11 @@ public class Point {
 
     public PointType type(){
         return type;
+    }
+
+    public PointType setType(PointType type){
+        this.type = type;
+        return this.type;
     }
 
     public int typeToInt(){

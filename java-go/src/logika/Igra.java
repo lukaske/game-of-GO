@@ -1,34 +1,18 @@
 package logika;
 import splosno.Poteza;
-
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Igra {
 
-    Point[][] board = new Point[9][9];
-    boolean isBlack = true;
+    private Point[][] board = new Point[9][9];
+    private boolean isBlack = true;
+    private PointType winner = PointType.EMPTY;
 
     public Igra(){
-        // ustvari novo igro velikosti 9x9
-        // črni začne igro
-        for (int i = 0; i < 9; i++){
-            for (int j = 0; j < 9; j++) {
-                board[i][j] = new Point(0, 0, i, j, PointType.EMPTY);
-            }
-        }
-
-        randomlyFill();
-        Set<PointGroup> groups = findAllGroups();
-
-        System.out.println("All groups:" + groups.size());
-        for (PointGroup pg : groups){
-            if (pg.getLiberties() == 0){
-                System.out.println("Group with no liberties:");
-                pg.printGroupOnBoard();
-            }
-        }
+        resetGame();
+        //randomlyFill();
+        //printGameState();
     }
 
     private Set<PointGroup> findAllGroups(){
@@ -48,40 +32,28 @@ public class Igra {
         return groups;
     }
 
-    private Set<Point> getGroup(Point p, Set<Point> existing_group){
-        // Returns a set of points that are in the same group as the source point
-        PointType pt = p.type();
-        existing_group.add(p);
-        int x = p.x();
-        int y = p.y();
-        int[][] to_visit = new int[4][2];
-        to_visit[0] = new int[]{x - 1, y};
-        to_visit[1] = new int[]{x + 1, y};
-        to_visit[2] = new int[]{x, y - 1};
-        to_visit[3] = new int[]{x, y + 1};
-
-        for (int i = 0; i < 4; i++){
-            int x1 = to_visit[i][0];
-            int y1 = to_visit[i][1];
-            if (x1 >= 0 && x1 < 9 && y1 >= 0 && y1 < 9){
-                Point p1 = board[x1][y1];
-                if (p1.type() == pt && !existing_group.contains(p1)){
-                    existing_group.addAll(getGroup(p1, existing_group));
-                }
-            }
-        }
-        return existing_group;
-    }
-
-    boolean odigraj(Poteza poteza){
-        boolean isPossible = board[poteza.x()][poteza.y()].type() == PointType.EMPTY;
+    public boolean odigraj(Poteza poteza){
+        System.out.println("Playing move: " + poteza.x() + ", " + poteza.y() + " by " + (isBlack ? "black" : "white") + " player");
+        Point p = board[poteza.x()][poteza.y()];
+        boolean isPossible = p.type() == PointType.EMPTY;
         if (isPossible){
             PointType color = isBlack ? PointType.BLACK : PointType.WHITE;
-            Point p = new Point(0, 0, poteza.x(), poteza.y(), color);
-            board[p.x()][p.y()] = p;
+            PointType anticolor = !isBlack ? PointType.BLACK : PointType.WHITE;
+            p.setType(color);
+            Set<PointGroup> groups = findAllGroups();
+            for (PointGroup pg : groups){
+                if (pg.getLiberties() == 0 && pg.getGroupType() == anticolor){
+                    // Color wins if it captures opponent's group
+                    winner = color;
+                }
+                else if (pg.getLiberties() == 0 && pg.getGroupType() == color){
+                    // If color committed suicide and did not capture opponent's group, color loses
+                    winner = anticolor;
+                }
+            }
             isBlack = !isBlack;
+            printGameState();
         }
-
         return isPossible;
     }
 
@@ -96,6 +68,65 @@ public class Igra {
                 board[i][j] = new Point(0, 0, i, j, pt);
             }
         }
+    }
+
+    public void resetGame(){
+        for (int i = 0; i < 9; i++){
+            for (int j = 0; j < 9; j++) {
+                board[i][j] = new Point(0, 0, i, j, PointType.EMPTY);
+            }
+        }
+        isBlack = true;
+    }
+
+    public void printCapture(){
+        Set<PointGroup> groups = findAllGroups();
+        System.out.println("All groups:" + groups.size());
+        for (PointGroup pg : groups){
+            if (pg.getLiberties() == 0){
+                System.out.println("Group with no liberties:");
+                pg.printGroupOnBoard();
+            }
+        }
+    }
+
+    public void printGameState(){
+        System.out.println("Game state:");
+        AsciiGridDisplay.printBoard(board, new HashSet<>());
+
+    }
+
+    public void calcBoardCoordinates(int x_start, int y_start, int width, int height){
+        // For point on board, determine coordinates on canvas
+        for (int i = 0; i < 9; i++){
+            for (int j = 0; j < 9; j++) {
+                Point p = board[i][j];
+                p.set_x_coord(x_start + i * width / 8);
+                p.set_y_coord(y_start + j * height / 8);
+            }
+        }
+    }
+
+    public Point[][] getBoard(){
+        return board;
+    }
+
+    public boolean isBlack(){
+        return isBlack;
+    }
+
+    public PointType getWinner(){
+        return winner;
+    }
+
+    public Set<Point> getPointsOfColor(PointType color){
+        Set<Point> points = new HashSet<>();
+        for (Point[] row : board){
+            for (Point p : row){
+                if (p.type() == color) points.add(p);
+            }
+        }
+        return points;
     }
 
     public static void main(String[] args) {

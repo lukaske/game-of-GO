@@ -1,22 +1,25 @@
 package gui;
 
+import logika.Igra;
 import logika.Point;
 import logika.PointType;
+import splosno.Poteza;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashSet;
 import java.util.Set;
 
 import static java.lang.Math.abs;
 
 public class GoBoard extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 
-    int width, height, padding, innerWidth, innerHeight, cellWidth, cellHeight;
-    Set<logika.Point> blackStones = new HashSet<>();
-    Set<logika.Point> whiteStones = new HashSet<>();
-    boolean playerTurn = true; // true = black, false = white
+    private int width, height, padding, innerWidth, innerHeight, cellWidth, cellHeight;
+    private Igra igra;
+    private Set<logika.Point> blackStones;
+    private Set<logika.Point> whiteStones;
+    private PointType winner;
+    private boolean isBlack;
 
     public GoBoard(int sirina, int visina) {
         super();
@@ -27,6 +30,10 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         setFocusable(true);
         requestFocus();
 
+        igra = new Igra();
+        getGameState();
+
+        repaint();
     }
 
     @Override
@@ -40,6 +47,7 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         innerHeight = height - 2 * padding;
         cellWidth = innerWidth / 8;
         cellHeight = innerHeight / 8;
+        igra.calcBoardCoordinates(padding, padding, innerWidth, innerHeight);
 
         g.setColor(new Color(189, 163, 94));
         g.fillRect(0, 0, width, height);
@@ -56,7 +64,6 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         }
 
         // Draw stones
-
         int stoneSize = cellWidth - 20;
         for (logika.Point p : blackStones) {
             g.setColor(Color.BLACK);
@@ -66,6 +73,23 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
             g.setColor(Color.WHITE);
             g.fillOval(p.x_coord() - (stoneSize / 2), p.y_coord() - (stoneSize / 2), stoneSize, stoneSize);
         }
+
+        String currentPlayer = isBlack ? "BLACK" : "WHITE";
+        Color color = isBlack ? Color.BLACK : Color.WHITE;
+        g.setColor(color);
+        g.drawString(currentPlayer, 410, 785);
+        // Paint over the old string, change color only for BLACK/WHITE text
+        g.setColor(Color.DARK_GRAY);
+        g.drawString("Current player: ", 310, 785);
+
+
+    }
+
+    private void getGameState(){
+        blackStones = igra.getPointsOfColor(PointType.BLACK);
+        whiteStones = igra.getPointsOfColor(PointType.WHITE);
+        winner = igra.getWinner();
+        isBlack = igra.isBlack();
     }
 
     @Override
@@ -105,7 +129,8 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         System.out.println("y_mouse: " + y_mouse);
 
         // Check if the click is within the board
-        if(x_mouse < padding || x_mouse > width - padding || y_mouse < padding || y_mouse > height - padding) {
+        int expanded_pad = padding - 20;
+        if(x_mouse < expanded_pad || x_mouse > width - expanded_pad || y_mouse < expanded_pad || y_mouse > height - expanded_pad) {
             return;
         }
 
@@ -124,22 +149,42 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         }
 
         if (smallest_x_index != -1 && smallest_y_index != -1){
-            int ix = smallest_x_index / (width - padding);
-            int iy = smallest_y_index / (height - padding);
-            PointType pt;
-            if (playerTurn) pt = PointType.BLACK;
-            else pt = PointType.WHITE;
-            logika.Point p = new Point(smallest_x_index, smallest_y_index, ix, iy, pt);
-            if (!whiteStones.contains(p) && !blackStones.contains(p)){
-                if (playerTurn) {
-                    blackStones.add(p);
-                }
-                else{
-                    whiteStones.add(p);
-                }
-                playerTurn = !playerTurn;
-                repaint();
+            // Translate coordinates to board indexes
+            int ix = (smallest_x_index - padding) / (cellWidth);
+            int iy = (smallest_y_index - padding) / (cellHeight);
+            Poteza poteza = new Poteza(ix, iy);
 
+
+            if (winner == PointType.EMPTY){
+                boolean wasPlayed = igra.odigraj(poteza);
+
+                // If the move was played, get the get game state, update screen and check if the game is over
+                if (wasPlayed) {
+                    getGameState();
+
+                    // If we have a winner, display dialogue
+                    if (winner != PointType.EMPTY) {
+                        repaint();
+
+                        String winnerString = winner == PointType.BLACK ? "Black" : "White";
+                        Object[] options = { "New game", "Back to menu" };
+                        int action = JOptionPane.showOptionDialog(this, winnerString + " has captured and won!",
+                                "Game over!", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,
+                                new ImageIcon("./assets/cup.png"), options, options[0]);
+
+                        // Reset game and return to main menu if the user chooses to
+                        igra = new Igra();
+                        getGameState();
+                        setFocusable(true);
+                        if (action == 1) {
+                            JPanel frame = (JPanel) this.getParent();
+                            CardLayout cardLayout = (CardLayout) frame.getLayout();
+                            cardLayout.show(frame, "splash-ekran");
+                            frame.repaint();
+                        }
+                    }
+                    repaint();
+                }
             }
         }
     }
