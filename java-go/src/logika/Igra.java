@@ -8,11 +8,14 @@ public class Igra {
     private Point[][] board = new Point[9][9];
     private boolean isBlack = true;
     private PointType winner = PointType.EMPTY;
+    private int totalBlackLiberties = 0;
+    private int totalWhiteLiberties = 0;
 
     public Igra(){
         resetGame();
         //randomlyFill();
         //printGameState();
+        //printCapture();
     }
 
     private Set<PointGroup> findAllGroups(){
@@ -41,18 +44,25 @@ public class Igra {
             PointType anticolor = !isBlack ? PointType.BLACK : PointType.WHITE;
             p.setType(color);
             Set<PointGroup> groups = findAllGroups();
+            totalBlackLiberties = 0;
+            totalWhiteLiberties = 0;
+
             for (PointGroup pg : groups){
-                if (pg.getLiberties() == 0 && pg.getGroupType() == anticolor){
-                    // Color wins if it captures opponent's group
-                    winner = color;
-                }
-                else if (pg.getLiberties() == 0 && pg.getGroupType() == color){
-                    // If color committed suicide and did not capture opponent's group, color loses
-                    winner = anticolor;
-                }
+                int liberties = pg.getLiberties();
+                PointType groupType = pg.getGroupType();
+
+                // Count liberties for both colors
+                if (groupType == PointType.BLACK) totalBlackLiberties += liberties;
+                else if (groupType == PointType.WHITE) totalWhiteLiberties += liberties;
+
+                // Color wins if it captures opponent's group
+                // If color committed suicide and did not capture opponent's group, color loses
+                if (liberties == 0 && groupType == anticolor) winner = color;
+                else if (liberties == 0 && groupType == color) winner = anticolor;
             }
+
             isBlack = !isBlack;
-            printGameState();
+            //printGameState();
         }
         return isPossible;
     }
@@ -83,7 +93,7 @@ public class Igra {
         Set<PointGroup> groups = findAllGroups();
         System.out.println("All groups:" + groups.size());
         for (PointGroup pg : groups){
-            if (pg.getLiberties() == 0){
+            if (pg.getLiberties() != 0){
                 System.out.println("Group with no liberties:");
                 pg.printGroupOnBoard();
             }
@@ -129,7 +139,22 @@ public class Igra {
         return points;
     }
 
+    public void copyOf(Igra igra){
+        this.board = igra.getBoard().clone();
+        this.isBlack = igra.isBlack();
+        this.winner = igra.getWinner();
+    }
+
+    public int getTotalBlackLiberties(){
+        return totalBlackLiberties;
+    }
+
+    public int getTotalWhiteLiberties(){
+        return totalWhiteLiberties;
+    }
+
     public static void main(String[] args) {
         Igra igra = new Igra();
     }
+
 }

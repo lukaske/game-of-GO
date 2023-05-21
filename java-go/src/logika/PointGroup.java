@@ -4,18 +4,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PointGroup {
-    private int liberties;
     // Not exactly liberties (double entries), however we just need to know if it's == 0, so it's fine
     private final Point startingPoint;
     private final Point[][] board;
     private final Set<Point> group;
+    private final Set<Point> liberties;
     private final PointType groupType;
 
     public PointGroup(Point[][] board, Point p){
         this.board = board;
         this.startingPoint = p;
         this.groupType = p.type();
-        this.liberties = 0;
+        this.liberties = new HashSet<>();
         if (p.type() != PointType.EMPTY) this.group = getGroup(p, new HashSet<>());
         else this.group = new HashSet<>();
     }
@@ -40,7 +40,7 @@ public class PointGroup {
                 if (p1.type() == pt && !existing_group.contains(p1)){
                     existing_group.addAll(getGroup(p1, existing_group));
                 } else if (p1.type() == PointType.EMPTY && !existing_group.contains(p1)){
-                    this.liberties++;
+                    liberties.add(p1);
                 }
             }
         }
@@ -49,7 +49,7 @@ public class PointGroup {
 
     public void printGroupOnBoard(){
         AsciiGridDisplay.printBoard(board, group);
-        System.out.println("Liberties: " + this.liberties);
+        System.out.println("Liberties: " + getLiberties());
     }
 
     public Point getStartingPoint(){
@@ -61,7 +61,7 @@ public class PointGroup {
     }
 
     public int getLiberties(){
-        return this.liberties;
+        return this.liberties.size();
     }
 
     public Set<Point> getGroup(){

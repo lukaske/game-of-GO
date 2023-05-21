@@ -82,7 +82,6 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         g.setColor(Color.DARK_GRAY);
         g.drawString("Current player: ", 310, 785);
 
-
     }
 
     private void getGameState(){

@@ -1,5 +1,7 @@
 package logika;
 
+import splosno.Poteza;
+
 import java.util.Objects;
 
 public class Point {
@@ -12,7 +14,7 @@ public class Point {
 
     // isBlack is true if the point is black, false if the point is white
 
-    private int x_coord, y_coord, x, y;
+    private int x_coord, y_coord, x, y, evaluation;
     PointType type;
 
     public Point(int x_coord, int y_coord, int x, int y, PointType type){
@@ -21,6 +23,8 @@ public class Point {
         this.x = x;
         this.y = y;
         this.type = type;
+        // Used by intelligent algorithms
+        this.evaluation = 0;
     }
 
     public int x_coord(){
@@ -56,6 +60,10 @@ public class Point {
     public PointType setType(PointType type){
         this.type = type;
         return this.type;
+    }
+
+    public Poteza toPoteza(){
+        return new Poteza(x, y);
     }
 
     public int typeToInt(){
