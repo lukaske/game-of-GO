@@ -14,7 +14,7 @@ public class Point {
 
     // isBlack is true if the point is black, false if the point is white
 
-    private int x_coord, y_coord, x, y, evaluation;
+    private int x_coord, y_coord, x, y;
     PointType type;
 
     public Point(int x_coord, int y_coord, int x, int y, PointType type){
@@ -23,8 +23,6 @@ public class Point {
         this.x = x;
         this.y = y;
         this.type = type;
-        // Used by intelligent algorithms
-        this.evaluation = 0;
     }
 
     public int x_coord(){
@@ -82,6 +80,11 @@ public class Point {
         if (other == this) return true;
         if (!(other instanceof Point otherPoint)) return false;
         return otherPoint.x == this.x && otherPoint.y == this.y;
+    }
+
+    @Override
+    public Object clone(){
+        return new Point(this.x_coord, this.y_coord, this.x, this.y, this.type);
     }
 }
 

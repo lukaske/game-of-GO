@@ -36,7 +36,7 @@ public class Igra {
     }
 
     public boolean odigraj(Poteza poteza){
-        System.out.println("Playing move: " + poteza.x() + ", " + poteza.y() + " by " + (isBlack ? "black" : "white") + " player");
+        //System.out.println("Playing move: " + poteza.x() + ", " + poteza.y() + " by " + (isBlack ? "black" : "white") + " player");
         Point p = board[poteza.x()][poteza.y()];
         boolean isPossible = p.type() == PointType.EMPTY;
         if (isPossible){
@@ -140,7 +140,13 @@ public class Igra {
     }
 
     public void copyOf(Igra igra){
-        this.board = igra.getBoard().clone();
+        Point[][] new_board = new Point[9][9];
+        for (int i = 0; i < 9; i++){
+            for (int j = 0; j < 9; j++) {
+                new_board[i][j] = new Point(0, 0, i, j, igra.getBoard()[i][j].type());
+            }
+        }
+        this.board = new_board;
         this.isBlack = igra.isBlack();
         this.winner = igra.getWinner();
     }
