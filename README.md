@@ -7,6 +7,11 @@ Repozitorij vsebuje kodo za zaključni projekt pri predmetu Programiranje 2 na F
 
 ---
 
+**Oddaja 26.5.2023:** V mapi `tekmovanje` se nahajajo paketi `splosno`, `inteligenca` in `logika`. Za tekmovanje v algoritmih je v paketu `inteligenca.Intelligenca` pripravljena metoda `izberiPotezo` in v razredu `logika.Igra` metoda `odigraj`.
+
+---
+
+
 **Tehnologije:** Java, paket [Java Swing](https://docs.oracle.com/javase/tutorial/uiswing/start/index.html)
 
 **Ekipa:** [Luka Skeledžija](https://github.com/lukaske)
