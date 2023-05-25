@@ -32,7 +32,7 @@ public class Inteligenca extends splosno.KdoIgra {
                 0
                 );
         Point best_move = smart_guess.p();
-        System.out.println("Found poteza" + best_move.toPoteza() + " in " + (System.currentTimeMillis() - start_time) + " ms");
+        //System.out.println("Found poteza" + best_move.toPoteza() + " in " + (System.currentTimeMillis() - start_time) + " ms");
         return best_move.toPoteza();
     }
 
