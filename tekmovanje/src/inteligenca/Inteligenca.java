@@ -45,6 +45,7 @@ public class Inteligenca extends splosno.KdoIgra {
 
         long now = System.currentTimeMillis();
         boolean ranOutOfTime = now - start_time > 5000;
+        boolean maximizingComputer = igra.isBlack() ^ computerIsBlack;
 
         scannedNodes += 1;
         if (depth > maxDepth) maxDepth = depth;
@@ -57,7 +58,6 @@ public class Inteligenca extends splosno.KdoIgra {
             igra_branch.odigraj(p.toPoteza());
 
             int liberties = 0;
-            boolean maximizingComputer = igra.isBlack() ^ computerIsBlack;
 
             if (maximizingComputer){
                 // Maximize for computer
@@ -101,7 +101,8 @@ public class Inteligenca extends splosno.KdoIgra {
 
         TreeNode best_move = evaluated_nodes.iterator().next();
         for (TreeNode n : evaluated_nodes){
-            if (best_move.evaluation() > n.evaluation()) best_move = n;
+            if (maximizingComputer && best_move.evaluation() < n.evaluation()) best_move = n;
+            if (!maximizingComputer && best_move.evaluation() > n.evaluation()) best_move = n;
         }
         return best_move;
     }
