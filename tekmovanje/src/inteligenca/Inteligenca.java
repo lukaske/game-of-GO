@@ -32,7 +32,7 @@ public class Inteligenca extends splosno.KdoIgra {
                 0
                 );
         Point best_move = smart_guess.p();
-        //System.out.println("Found poteza" + best_move.toPoteza() + " in " + (System.currentTimeMillis() - start_time) + " ms");
+        System.out.println("Found poteza" + best_move.toPoteza() + " in " + (System.currentTimeMillis() - start_time) + " ms");
         return best_move.toPoteza();
     }
 
@@ -109,12 +109,7 @@ public class Inteligenca extends splosno.KdoIgra {
 
     public Poteza izberiPotezo(Igra igra){
         // make an intelligent move based on Igra
-        return minimax(igra, true);
-    }
-
-    public Poteza izberiPotezo2(Igra igra){
-        // make an intelligent move based on Igra
-        return minimax(igra, false);
+        return minimax(igra, igra.isBlack());
     }
 
     private void playWithItself(){
@@ -128,7 +123,7 @@ public class Inteligenca extends splosno.KdoIgra {
 
             System.out.println("Scanned nodes = " + scannedNodes);
 
-            Poteza poteza2 = izberiPotezo2(igra);
+            Poteza poteza2 = izberiPotezo(igra);
             igra.odigraj(poteza2);
 
             System.out.println("Scanned nodes = " + scannedNodes);
