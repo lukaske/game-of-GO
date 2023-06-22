@@ -63,6 +63,14 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
             cardLayout.show(frame, "capture-go");
             frame.repaint();
         });
+
+        playTraditionalGo.addActionListener(e -> {
+            JPanel frame = (JPanel) self_ref.getParent();
+            CardLayout cardLayout = (CardLayout) frame.getLayout();
+            cardLayout.show(frame, "traditional-go");
+            frame.repaint();
+        });
+
     }
 
     @Override

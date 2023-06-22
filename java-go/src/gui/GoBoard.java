@@ -64,7 +64,35 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
             g2d.drawLine(padding, y, width - padding, y);
         }
 
-        // Draw stones
+        // Draw black dots on board intersection for visibility
+
+        int dotSize = 10;
+        int dotSpacing = cellWidth * 2;
+
+        int centerX = padding + cellWidth * (board_size / 2);
+        int centerY = padding + cellHeight * (board_size / 2);
+        int dotCount = (board_size - 5) / 2;
+
+        for (int i = 0; i < dotCount; i++) {
+            int x = centerX + (i * dotSpacing);
+            int y = centerY + (i * dotSpacing);
+            g.setColor(Color.BLACK);
+            g.fillOval(x - (dotSize / 2), y - (dotSize / 2), dotSize, dotSize);
+
+            x = centerX - (i * dotSpacing);
+            y = centerY + (i * dotSpacing);
+            g.fillOval(x - (dotSize / 2), y - (dotSize / 2), dotSize, dotSize);
+
+            x = centerX - (i * dotSpacing);
+            y = centerY - (i * dotSpacing);
+            g.fillOval(x - (dotSize / 2), y - (dotSize / 2), dotSize, dotSize);
+
+            x = centerX + (i * dotSpacing);
+            y = centerY - (i * dotSpacing);
+            g.fillOval(x - (dotSize / 2), y - (dotSize / 2), dotSize, dotSize);
+
+
+            // Draw stones
         int stoneSize = cellWidth - 20;
         for (logika.Point p : blackStones) {
             g.setColor(Color.BLACK);
@@ -74,6 +102,10 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
             g.setColor(Color.WHITE);
             g.fillOval(p.x_coord() - (stoneSize / 2), p.y_coord() - (stoneSize / 2), stoneSize, stoneSize);
         }
+
+
+        }
+
 
         String currentPlayer = isBlack ? "BLACK" : "WHITE";
         Color color = isBlack ? Color.BLACK : Color.WHITE;

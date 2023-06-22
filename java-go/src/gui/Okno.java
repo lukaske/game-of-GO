@@ -16,6 +16,7 @@ public class Okno extends JFrame implements ActionListener{
     protected CardLayout cardLayout;
     protected JPanel panel;
     protected GoBoard goBoard;
+    protected GoBoardTraditional traditionalGoBoard;
     protected SplashEkran splashEkran;
     boolean showSplashScreen = true;
 
@@ -33,8 +34,11 @@ public class Okno extends JFrame implements ActionListener{
         add(panel);
 
         goBoard = new GoBoard(sirina, visina, board_size);
+        traditionalGoBoard = new GoBoardTraditional(sirina, visina, board_size);
+
         splashEkran = new SplashEkran(sirina, visina);
         panel.add("capture-go", goBoard);
+        panel.add("traditional-go", traditionalGoBoard);
         panel.add("splash-ekran", splashEkran);
 
         cardLayout.show(panel, "splash-ekran");
@@ -53,9 +57,7 @@ public class Okno extends JFrame implements ActionListener{
         navodilaGo = dodajMenuItem(menuOProgramu, "How to play Traditional Go");
         gitHubLink = dodajMenuItem(menuOProgramu, "Open on GitHub");
 
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 
     }
 
@@ -109,7 +111,6 @@ public class Okno extends JFrame implements ActionListener{
             panel.revalidate();
             panel.repaint();
         }
-
 
     }
 
