@@ -15,8 +15,8 @@ public class Okno extends JFrame implements ActionListener{
     protected int board_size = 9;
     protected CardLayout cardLayout;
     protected JPanel panel;
-    protected GoBoard goBoard;
-    protected GoBoardTraditional traditionalGoBoard;
+    protected CaptureGoBoard captureGoBoard;
+    protected TraditionalGoBoardChild traditionalGoBoard;
     protected SplashEkran splashEkran;
     boolean showSplashScreen = true;
 
@@ -33,11 +33,11 @@ public class Okno extends JFrame implements ActionListener{
         panel = new JPanel(cardLayout);
         add(panel);
 
-        goBoard = new GoBoard(sirina, visina, board_size);
-        traditionalGoBoard = new GoBoardTraditional(sirina, visina, board_size);
+        captureGoBoard = new CaptureGoBoard(sirina, visina, board_size);
+        traditionalGoBoard = new TraditionalGoBoardChild(sirina, visina, board_size);
 
         splashEkran = new SplashEkran(sirina, visina);
-        panel.add("capture-go", goBoard);
+        panel.add("capture-go", captureGoBoard);
         panel.add("traditional-go", traditionalGoBoard);
         panel.add("splash-ekran", splashEkran);
 
@@ -108,7 +108,7 @@ public class Okno extends JFrame implements ActionListener{
         else if (objekt == endGame) {
             System.out.println(panel.getComponentCount());
             cardLayout.show(panel, "splash-ekran");
-            goBoard.resetBoard();
+            captureGoBoard.resetBoard();
             traditionalGoBoard.resetBoard();
             panel.revalidate();
             panel.repaint();

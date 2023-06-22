@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PointGroup {
-    // Not exactly liberties (double entries), however we just need to know if it's == 0, so it's fine
     private final Point startingPoint;
     private final Point[][] board;
     private final Set<Point> group;

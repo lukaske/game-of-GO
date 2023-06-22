@@ -1,7 +1,7 @@
 package gui;
 
 import logika.Igra;
-import logika.Point;
+import logika.IgraTraditional;
 import logika.PointType;
 import splosno.Poteza;
 
@@ -12,24 +12,24 @@ import java.util.Set;
 
 import static java.lang.Math.abs;
 
-public class GoBoard extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
+public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 
-    private int width, height, padding, innerWidth, innerHeight, cellWidth, cellHeight;
-    private int board_size;
-    protected Igra igra;
-    private Set<logika.Point> blackStones;
-    private Set<logika.Point> whiteStones;
-    private PointType winner;
-    private boolean isBlack;
-    private final JToolBar topToolbar = new JToolBar();
-    private JLabel statusLabel = new JLabel("Select player roles");
-    private JButton start_game = new JButton("Start game");
-    private JComboBox<String> blackPlayer = new JComboBox<>();
-    private JComboBox<String> whitePlayer = new JComboBox<>();
-    private boolean isGameRunning = false;
+    protected int width, height, padding, innerWidth, innerHeight, cellWidth, cellHeight;
+    protected int board_size;
+    protected IgraTraditional igra;
+    protected Set<logika.Point> blackStones;
+    protected Set<logika.Point> whiteStones;
+    protected PointType winner;
+    protected boolean isBlack;
+    protected final JToolBar topToolbar = new JToolBar();
+    protected JLabel statusLabel = new JLabel("Select player roles");
+    protected JButton start_game = new JButton("Start game");
+    protected JComboBox<String> blackPlayer = new JComboBox<>();
+    protected JComboBox<String> whitePlayer = new JComboBox<>();
+    protected boolean isGameRunning = true;
 
 
-    public GoBoard(int sirina, int visina, int board_size) {
+    public TraditionalGoBoard(int sirina, int visina, int board_size) {
         super(new BorderLayout());
         setPreferredSize(new Dimension(sirina, visina));
         addMouseListener(this);
@@ -66,7 +66,7 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         });
 
         this.board_size = board_size;
-        this.igra = new Igra(board_size);
+        this.igra = new IgraTraditional(board_size);
         getGameState();
         repaint();
     }
@@ -265,7 +265,7 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
                                 new ImageIcon("./assets/cup.png"), options, options[0]);
 
                         // Reset game and return to main menu if the user chooses to
-                        igra = new Igra(board_size);
+                        igra = new IgraTraditional(board_size);
                         getGameState();
                         setFocusable(true);
                         if (action == 1) {

@@ -3,14 +3,14 @@ import splosno.Poteza;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Igra {
+public class Igra  {
 
-    private int board_size;
-    private Point[][] board;
-    private boolean isBlack = true;
-    private PointType winner = PointType.EMPTY;
-    private int totalBlackLiberties = 0;
-    private int totalWhiteLiberties = 0;
+    protected int board_size;
+    protected Point[][] board;
+    protected boolean isBlack = true;
+    protected PointType winner = PointType.EMPTY;
+    protected int totalBlackLiberties = 0;
+    protected int totalWhiteLiberties = 0;
 
     public Igra(int board_size){
         this.board_size = board_size;
@@ -21,7 +21,7 @@ public class Igra {
         //printCapture();
     }
 
-    private Set<PointGroup> findAllGroups(){
+    protected Set<PointGroup> findAllGroups(){
         // Finds all groups on the board
         // Returns a set of PointGroups
         Set<PointGroup> groups = new HashSet<>();
@@ -70,7 +70,7 @@ public class Igra {
         return isPossible;
     }
 
-    private void randomlyFill(){
+    protected void randomlyFill(){
         for (int i = 0; i < board_size; i++){
             for (int j = 0; j < board_size; j++) {
                 PointType pt;
