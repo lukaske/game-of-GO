@@ -10,8 +10,8 @@ import java.net.URL;
 
 public class Okno extends JFrame implements ActionListener{
 
-    protected int sirina = 800;
-    protected int visina = 800;
+    protected int sirina = 720;
+    protected int visina = 750;
     protected int board_size = 9;
     protected CardLayout cardLayout;
     protected JPanel panel;

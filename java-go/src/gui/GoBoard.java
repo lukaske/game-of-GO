@@ -21,15 +21,61 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
     private Set<logika.Point> whiteStones;
     private PointType winner;
     private boolean isBlack;
+    private final JToolBar topToolbar = new JToolBar();
+    private JLabel statusLabel = new JLabel("Select player roles");
+    private JButton start_game = new JButton("Start game");
+    private JComboBox<String> blackPlayer = new JComboBox<>();
+    private JComboBox<String> whitePlayer = new JComboBox<>();
+    private boolean isGameRunning = false;
+
 
     public GoBoard(int sirina, int visina, int board_size) {
-        super();
+        super(new BorderLayout());
         setPreferredSize(new Dimension(sirina, visina));
         addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
         setFocusable(true);
         requestFocus();
+
+        topToolbar.setFloatable(false);
+        add(topToolbar, BorderLayout.SOUTH);
+        topToolbar.addSeparator();
+        topToolbar.add(start_game);
+        topToolbar.addSeparator();
+        topToolbar.add(statusLabel);
+        topToolbar.addSeparator();
+
+        topToolbar.add(new JLabel("Black: "));
+        blackPlayer.addItem("Human");
+        blackPlayer.addItem("Computer (MCTS)");
+        topToolbar.add(blackPlayer);
+
+        topToolbar.add(new JLabel("White: "));
+        whitePlayer.addItem("Human");
+        whitePlayer.addItem("Computer (MCTS)");
+        topToolbar.add(whitePlayer);
+
+
+        start_game.addActionListener(e -> {
+            if (!isGameRunning) {
+                isGameRunning = true;
+                start_game.setText("Stop game");
+                String currentPlayer = isBlack ? "BLACK" : "WHITE";
+                statusLabel.setText("Current player: " + currentPlayer);
+                blackPlayer.setEnabled(false);
+                whitePlayer.setEnabled(false);
+            } else {
+                isGameRunning = false;
+                start_game.setText("Start game");
+                statusLabel.setText("Select player roles");
+                blackPlayer.setEnabled(true);
+                whitePlayer.setEnabled(true);
+                igra.resetGame();
+                getGameState();
+                repaint();
+            }
+        });
 
         this.board_size = board_size;
         this.igra = new Igra(board_size);
@@ -42,8 +88,8 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         width = getWidth();
-        height = getHeight();
-        padding = 40;
+        padding = 60;
+        height = getHeight() - (padding / 2);
         innerWidth = width - 2 * padding;
         innerHeight = height - 2 * padding;
         cellWidth = innerWidth / (board_size - 1);
@@ -114,7 +160,9 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         // Paint over the old string, change color only for BLACK/WHITE text
         g.setColor(Color.DARK_GRAY);
         g.drawString("Current player: ", 310, 785);
-
+        if (isGameRunning){
+            statusLabel.setText("Current player: " + currentPlayer);
+        }
     }
 
     private void getGameState(){
@@ -150,6 +198,8 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (!isGameRunning) return;
+
         int x_mouse = e.getX();
         int smallest_dist_x = width;
         int smallest_x_index = -1;
