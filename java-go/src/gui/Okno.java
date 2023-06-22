@@ -108,6 +108,8 @@ public class Okno extends JFrame implements ActionListener{
         else if (objekt == endGame) {
             System.out.println(panel.getComponentCount());
             cardLayout.show(panel, "splash-ekran");
+            goBoard.resetBoard();
+            traditionalGoBoard.resetBoard();
             panel.revalidate();
             panel.repaint();
         }

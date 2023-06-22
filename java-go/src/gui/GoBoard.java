@@ -16,7 +16,7 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
 
     private int width, height, padding, innerWidth, innerHeight, cellWidth, cellHeight;
     private int board_size;
-    private Igra igra;
+    protected Igra igra;
     private Set<logika.Point> blackStones;
     private Set<logika.Point> whiteStones;
     private PointType winner;
@@ -59,27 +59,14 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
 
         start_game.addActionListener(e -> {
             if (!isGameRunning) {
-                isGameRunning = true;
-                start_game.setText("Stop game");
-                String currentPlayer = isBlack ? "BLACK" : "WHITE";
-                statusLabel.setText("Current player: " + currentPlayer);
-                blackPlayer.setEnabled(false);
-                whitePlayer.setEnabled(false);
+                startGame();
             } else {
-                isGameRunning = false;
-                start_game.setText("Start game");
-                statusLabel.setText("Select player roles");
-                blackPlayer.setEnabled(true);
-                whitePlayer.setEnabled(true);
-                igra.resetGame();
-                getGameState();
-                repaint();
+                stopGame();
             }
         });
 
         this.board_size = board_size;
         this.igra = new Igra(board_size);
-
         getGameState();
         repaint();
     }
@@ -148,10 +135,7 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
             g.setColor(Color.WHITE);
             g.fillOval(p.x_coord() - (stoneSize / 2), p.y_coord() - (stoneSize / 2), stoneSize, stoneSize);
         }
-
-
         }
-
 
         String currentPlayer = isBlack ? "BLACK" : "WHITE";
         Color color = isBlack ? Color.BLACK : Color.WHITE;
@@ -170,6 +154,32 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         whiteStones = igra.getPointsOfColor(PointType.WHITE);
         winner = igra.getWinner();
         isBlack = igra.isBlack();
+    }
+
+    protected void startGame(){
+        isGameRunning = true;
+        start_game.setText("Stop game");
+        String currentPlayer = isBlack ? "BLACK" : "WHITE";
+        statusLabel.setText("Current player: " + currentPlayer);
+        blackPlayer.setEnabled(false);
+        whitePlayer.setEnabled(false);
+        getGameState();
+        repaint();
+    }
+
+    protected void stopGame(){
+        isGameRunning = false;
+        start_game.setText("Start game");
+        statusLabel.setText("Select player roles");
+        blackPlayer.setEnabled(true);
+        whitePlayer.setEnabled(true);
+        igra.resetGame();
+        getGameState();
+        repaint();
+    }
+
+    protected void resetBoard() {
+        stopGame();
     }
 
     @Override
