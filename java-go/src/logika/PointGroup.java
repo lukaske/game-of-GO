@@ -10,12 +10,14 @@ public class PointGroup {
     private final Set<Point> group;
     private final Set<Point> liberties;
     private final PointType groupType;
+    private final int board_size;
 
-    public PointGroup(Point[][] board, Point p){
+    public PointGroup(Point[][] board, Point p, int board_size){
         this.board = board;
         this.startingPoint = p;
         this.groupType = p.type();
         this.liberties = new HashSet<>();
+        this.board_size = board_size;
         if (p.type() != PointType.EMPTY) this.group = getGroup(p, new HashSet<>());
         else this.group = new HashSet<>();
     }
@@ -35,7 +37,7 @@ public class PointGroup {
         for (int i = 0; i < 4; i++){
             int x1 = to_visit[i][0];
             int y1 = to_visit[i][1];
-            if (x1 >= 0 && x1 < 9 && y1 >= 0 && y1 < 9){
+            if (x1 >= 0 && x1 < board_size && y1 >= 0 && y1 < board_size){
                 Point p1 = board[x1][y1];
                 if (p1.type() == pt && !existing_group.contains(p1)){
                     existing_group.addAll(getGroup(p1, existing_group));

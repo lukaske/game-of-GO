@@ -5,13 +5,16 @@ import java.util.Set;
 
 public class Igra {
 
-    private Point[][] board = new Point[9][9];
+    private int board_size;
+    private Point[][] board;
     private boolean isBlack = true;
     private PointType winner = PointType.EMPTY;
     private int totalBlackLiberties = 0;
     private int totalWhiteLiberties = 0;
 
-    public Igra(){
+    public Igra(int board_size){
+        this.board_size = board_size;
+        this.board = new Point[board_size][board_size];
         resetGame();
         //randomlyFill();
         //printGameState();
@@ -26,7 +29,7 @@ public class Igra {
         for (Point[] row : board){
             for (Point p : row){
                 if (p.type() != PointType.EMPTY && !visitedPoints.contains(p)){
-                    PointGroup pg = new PointGroup(board, p);
+                    PointGroup pg = new PointGroup(board, p, board_size);
                     groups.add(pg);
                     visitedPoints.addAll(pg.getGroup());
                 }
@@ -68,8 +71,8 @@ public class Igra {
     }
 
     private void randomlyFill(){
-        for (int i = 0; i < 9; i++){
-            for (int j = 0; j < 9; j++) {
+        for (int i = 0; i < board_size; i++){
+            for (int j = 0; j < board_size; j++) {
                 PointType pt;
                 double rand = Math.random();
                 if (rand <= 0.3) pt = PointType.BLACK;
@@ -81,8 +84,8 @@ public class Igra {
     }
 
     public void resetGame(){
-        for (int i = 0; i < 9; i++){
-            for (int j = 0; j < 9; j++) {
+        for (int i = 0; i < board_size; i++){
+            for (int j = 0; j < board_size; j++) {
                 board[i][j] = new Point(0, 0, i, j, PointType.EMPTY);
             }
         }
@@ -108,11 +111,11 @@ public class Igra {
 
     public void calcBoardCoordinates(int x_start, int y_start, int width, int height){
         // For point on board, determine coordinates on canvas
-        for (int i = 0; i < 9; i++){
-            for (int j = 0; j < 9; j++) {
+        for (int i = 0; i < board_size; i++){
+            for (int j = 0; j < board_size; j++) {
                 Point p = board[i][j];
-                p.set_x_coord(x_start + i * width / 8);
-                p.set_y_coord(y_start + j * height / 8);
+                p.set_x_coord(x_start + i * width / (board_size - 1));
+                p.set_y_coord(y_start + j * height / (board_size - 1));
             }
         }
     }
@@ -140,9 +143,9 @@ public class Igra {
     }
 
     public void copyOf(Igra igra){
-        Point[][] new_board = new Point[9][9];
-        for (int i = 0; i < 9; i++){
-            for (int j = 0; j < 9; j++) {
+        Point[][] new_board = new Point[board_size][board_size];
+        for (int i = 0; i < board_size; i++){
+            for (int j = 0; j < board_size; j++) {
                 new_board[i][j] = new Point(0, 0, i, j, igra.getBoard()[i][j].type());
             }
         }
@@ -160,7 +163,7 @@ public class Igra {
     }
 
     public static void main(String[] args) {
-        Igra igra = new Igra();
+        Igra igra = new Igra(9);
     }
 
 }

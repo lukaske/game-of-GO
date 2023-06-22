@@ -15,13 +15,14 @@ import static java.lang.Math.abs;
 public class GoBoard extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 
     private int width, height, padding, innerWidth, innerHeight, cellWidth, cellHeight;
+    private int board_size;
     private Igra igra;
     private Set<logika.Point> blackStones;
     private Set<logika.Point> whiteStones;
     private PointType winner;
     private boolean isBlack;
 
-    public GoBoard(int sirina, int visina) {
+    public GoBoard(int sirina, int visina, int board_size) {
         super();
         setPreferredSize(new Dimension(sirina, visina));
         addMouseListener(this);
@@ -30,23 +31,23 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
         setFocusable(true);
         requestFocus();
 
-        igra = new Igra();
-        getGameState();
+        this.board_size = board_size;
+        this.igra = new Igra(board_size);
 
+        getGameState();
         repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         width = getWidth();
         height = getHeight();
         padding = 40;
         innerWidth = width - 2 * padding;
         innerHeight = height - 2 * padding;
-        cellWidth = innerWidth / 8;
-        cellHeight = innerHeight / 8;
+        cellWidth = innerWidth / (board_size - 1);
+        cellHeight = innerHeight / (board_size - 1);
         igra.calcBoardCoordinates(padding, padding, innerWidth, innerHeight);
 
         g.setColor(new Color(189, 163, 94));
@@ -172,7 +173,7 @@ public class GoBoard extends JPanel implements MouseListener, MouseMotionListene
                                 new ImageIcon("./assets/cup.png"), options, options[0]);
 
                         // Reset game and return to main menu if the user chooses to
-                        igra = new Igra();
+                        igra = new Igra(board_size);
                         getGameState();
                         setFocusable(true);
                         if (action == 1) {

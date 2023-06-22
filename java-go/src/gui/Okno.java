@@ -12,6 +12,7 @@ public class Okno extends JFrame implements ActionListener{
 
     protected int sirina = 800;
     protected int visina = 800;
+    protected int board_size = 9;
     protected CardLayout cardLayout;
     protected JPanel panel;
     protected GoBoard goBoard;
@@ -31,7 +32,7 @@ public class Okno extends JFrame implements ActionListener{
         panel = new JPanel(cardLayout);
         add(panel);
 
-        goBoard = new GoBoard(sirina, visina);
+        goBoard = new GoBoard(sirina, visina, board_size);
         splashEkran = new SplashEkran(sirina, visina);
         panel.add("capture-go", goBoard);
         panel.add("splash-ekran", splashEkran);
