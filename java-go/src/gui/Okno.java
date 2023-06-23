@@ -10,19 +10,18 @@ import java.net.URL;
 
 public class Okno extends JFrame implements ActionListener {
 
+    private final JMenuItem navodilaGo;
+    private final JMenuItem navodilaCaptureGo;
+    private final JMenuItem gitHubLink;
+    private final JMenuItem endGame;
     protected int sirina = 720;
     protected int visina = 750;
     protected int board_size = 9;
     protected CardLayout cardLayout;
     protected JPanel panel;
     protected CaptureGoBoard captureGoBoard;
-    protected TraditionalGoBoardChild traditionalGoBoard;
+    protected TraditionalGoBoard traditionalGoBoard;
     protected SplashEkran splashEkran;
-
-    private final JMenuItem navodilaGo;
-    private final JMenuItem navodilaCaptureGo;
-    private final JMenuItem gitHubLink;
-    private final JMenuItem endGame;
 
 
     public Okno() {
@@ -35,7 +34,7 @@ public class Okno extends JFrame implements ActionListener {
         add(panel);
 
         captureGoBoard = new CaptureGoBoard(sirina, visina, board_size);
-        traditionalGoBoard = new TraditionalGoBoardChild(sirina, visina, board_size);
+        traditionalGoBoard = new TraditionalGoBoard(sirina, visina, board_size);
 
         splashEkran = new SplashEkran(sirina, visina);
         panel.add("capture-go", captureGoBoard);
