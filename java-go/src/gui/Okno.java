@@ -10,11 +10,13 @@ import java.net.URL;
 
 public class Okno extends JFrame implements ActionListener{
 
-    protected int sirina = 800;
-    protected int visina = 800;
+    protected int sirina = 720;
+    protected int visina = 750;
+    protected int board_size = 9;
     protected CardLayout cardLayout;
     protected JPanel panel;
-    protected GoBoard goBoard;
+    protected CaptureGoBoard captureGoBoard;
+    protected TraditionalGoBoardChild traditionalGoBoard;
     protected SplashEkran splashEkran;
     boolean showSplashScreen = true;
 
@@ -31,9 +33,12 @@ public class Okno extends JFrame implements ActionListener{
         panel = new JPanel(cardLayout);
         add(panel);
 
-        goBoard = new GoBoard(sirina, visina);
+        captureGoBoard = new CaptureGoBoard(sirina, visina, board_size);
+        traditionalGoBoard = new TraditionalGoBoardChild(sirina, visina, board_size);
+
         splashEkran = new SplashEkran(sirina, visina);
-        panel.add("capture-go", goBoard);
+        panel.add("capture-go", captureGoBoard);
+        panel.add("traditional-go", traditionalGoBoard);
         panel.add("splash-ekran", splashEkran);
 
         cardLayout.show(panel, "splash-ekran");
@@ -52,9 +57,7 @@ public class Okno extends JFrame implements ActionListener{
         navodilaGo = dodajMenuItem(menuOProgramu, "How to play Traditional Go");
         gitHubLink = dodajMenuItem(menuOProgramu, "Open on GitHub");
 
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 
     }
 
@@ -105,10 +108,11 @@ public class Okno extends JFrame implements ActionListener{
         else if (objekt == endGame) {
             System.out.println(panel.getComponentCount());
             cardLayout.show(panel, "splash-ekran");
+            captureGoBoard.resetBoard();
+            traditionalGoBoard.resetBoard();
             panel.revalidate();
             panel.repaint();
         }
-
 
     }
 

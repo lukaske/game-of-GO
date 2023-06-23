@@ -83,7 +83,7 @@ public class Point {
     }
 
     @Override
-    public Object clone(){
+    public Point clone(){
         return new Point(this.x_coord, this.y_coord, this.x, this.y, this.type);
     }
 }

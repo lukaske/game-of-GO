@@ -9,11 +9,13 @@ import java.util.*;
 
 public class Inteligenca extends splosno.KdoIgra {
 
+    private int board_size = 9;
     int scannedNodes = 0;
     int maxDepth = 0;
 
-    public Inteligenca(){
+    public Inteligenca(int board_size){
         super("play-goh");
+        this.board_size = board_size;
     }
 
     private Poteza minimax(Igra igra, boolean computerIsBlack){
@@ -53,7 +55,7 @@ public class Inteligenca extends splosno.KdoIgra {
         if(possible_moves.isEmpty() || ranOutOfTime) return current_node;
 
         for (Point p : newList){
-            Igra igra_branch = new Igra();
+            Igra igra_branch = new Igra(board_size);
             igra_branch.copyOf(igra);
             igra_branch.odigraj(p.toPoteza());
 
@@ -113,7 +115,7 @@ public class Inteligenca extends splosno.KdoIgra {
     }
 
     private void playWithItself(){
-        Igra igra = new Igra();
+        Igra igra = new Igra(board_size);
         int j = 0;
         while (igra.getWinner() == PointType.EMPTY){
             j += 1;
@@ -135,7 +137,7 @@ public class Inteligenca extends splosno.KdoIgra {
     }
 
     public static void main(String[] args){
-        Inteligenca inteligenca = new Inteligenca();
+        Inteligenca inteligenca = new Inteligenca(9);
         inteligenca.playWithItself();
     }
 
