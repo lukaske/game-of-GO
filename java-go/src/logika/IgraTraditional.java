@@ -17,28 +17,28 @@ public class IgraTraditional extends Igra {
     private Set<Point> whiteCapturedArea = new HashSet<>();
 
 
-    public IgraTraditional(int board_size){
+    public IgraTraditional(int board_size) {
         super(board_size);
         lastMove = board[0][0];
     }
 
-    public Set<Point> disallowedMoves(PointType playerColor, boolean allowedMovesOnly){
+    public Set<Point> disallowedMoves(PointType playerColor, boolean allowedMovesOnly) {
         Set<Point> allowedMoves = new HashSet<>();
         Set<Point> disallowedMoves = new HashSet<>();
 
-        for (Point[] row : board){
-            for (Point p : row){
-                if (p.type() == PointType.EMPTY){
+        for (Point[] row : board) {
+            for (Point p : row) {
+                if (p.type() == PointType.EMPTY) {
 
                     // Check if move is suicidal
                     int isSuicide = -1;
                     PointType color = playerColor;
-                    PointType anticolor = playerColor == PointType.WHITE? PointType.BLACK : PointType.WHITE;
+                    PointType anticolor = playerColor == PointType.WHITE ? PointType.BLACK : PointType.WHITE;
                     p.setType(color);
                     Set<PointGroup> groups = findAllGroups();
                     totalBlackLiberties = 0;
                     totalWhiteLiberties = 0;
-                    for (PointGroup pg : groups){
+                    for (PointGroup pg : groups) {
                         int liberties = pg.getLiberties();
                         PointType groupType = pg.getGroupType();
 
@@ -54,10 +54,11 @@ public class IgraTraditional extends Igra {
 
                     // Check if move is Ko
                     boolean isKo = false;
-                    if (lastCapturedSet.size() == 1){
+                    if (lastCapturedSet.size() == 1) {
                         Iterator<Point> iterator = lastCapturedSet.iterator();
                         Point capturedStone = iterator.next();
-                        if (capturedStone.type() == p.type() && capturedStone.equals(p) && secondLastMove.equals(p) && secondLastMove.type() == p.type()) isKo = true;
+                        if (capturedStone.type() == p.type() && capturedStone.equals(p) && secondLastMove.equals(p) && secondLastMove.type() == p.type())
+                            isKo = true;
                     }
                     p.setType(PointType.EMPTY);
 
@@ -87,7 +88,7 @@ public class IgraTraditional extends Igra {
         Point p = board[poteza.x()][poteza.y()];
         boolean isPossible = isAllowedMove(p, color);
 
-        if (isPossible){
+        if (isPossible) {
             p.setType(color);
 
             secondLastMove = lastMove.clone();
@@ -97,7 +98,7 @@ public class IgraTraditional extends Igra {
             totalBlackLiberties = 0;
             totalWhiteLiberties = 0;
 
-            for (PointGroup pg : groups){
+            for (PointGroup pg : groups) {
                 int liberties = pg.getLiberties();
                 PointType groupType = pg.getGroupType();
 
@@ -107,7 +108,7 @@ public class IgraTraditional extends Igra {
 
                 // Check if group has been captured
                 if (liberties == 0 && groupType == anticolor) {
-                    for (Point point : pg.getGroup()){
+                    for (Point point : pg.getGroup()) {
                         board[point.x()][point.y()] = point.clone();
                         board[point.x()][point.y()].setType(PointType.EMPTY);
                         if (point.type() == PointType.BLACK) blackCaptures++;
@@ -125,20 +126,20 @@ public class IgraTraditional extends Igra {
         return isPossible;
     }
 
-    protected boolean isAllowedMove(Point p, PointType color){
+    protected boolean isAllowedMove(Point p, PointType color) {
         if (p.type() != PointType.EMPTY) return false;
         Set<Point> disallowedMoves = disallowedMoves(color, false);
         return !disallowedMoves.contains(p);
     }
 
-    protected void countArea(){
+    protected void countArea() {
         Set<PointGroup> groups = new HashSet<>();
         Set<Point> visitedPoints = new HashSet<>();
         whiteCapturedArea = new HashSet<>();
         blackCapturedArea = new HashSet<>();
-        for (Point[] row : board){
-            for (Point p : row){
-                if (p.type() == PointType.EMPTY && !visitedPoints.contains(p)){
+        for (Point[] row : board) {
+            for (Point p : row) {
+                if (p.type() == PointType.EMPTY && !visitedPoints.contains(p)) {
                     PointGroup pg = new PointGroup(board, p, board_size, true);
                     groups.add(pg);
                     visitedPoints.addAll(pg.getGroup());
@@ -150,17 +151,17 @@ public class IgraTraditional extends Igra {
         }
     }
 
-    public int getBlackArea(){
+    public int getBlackArea() {
         return blackCapturedArea.size();
     }
 
-    public int getWhiteArea(){
+    public int getWhiteArea() {
         return whiteCapturedArea.size();
     }
 
     @Override
-    public void resetGame(){
-        for (int i = 0; i < board_size; i++){
+    public void resetGame() {
+        for (int i = 0; i < board_size; i++) {
             for (int j = 0; j < board_size; j++) {
                 board[i][j] = new Point(0, 0, i, j, PointType.EMPTY);
             }
@@ -174,13 +175,13 @@ public class IgraTraditional extends Igra {
         countArea();
     }
 
-    public boolean isGameOver(){
+    public boolean isGameOver() {
         return (winner == PointType.NEUTRAL || winner == PointType.BLACK || winner == PointType.WHITE);
     }
 
-    public void copyTraditional(IgraTraditional igra){
+    public void copyTraditional(IgraTraditional igra) {
         Point[][] new_board = new Point[board_size][board_size];
-        for (int i = 0; i < board_size; i++){
+        for (int i = 0; i < board_size; i++) {
             for (int j = 0; j < board_size; j++) {
                 new_board[i][j] = new Point(0, 0, i, j, igra.getBoard()[i][j].type());
             }
@@ -200,45 +201,45 @@ public class IgraTraditional extends Igra {
 
     }
 
-    public Point getSecondLastMove(){
+    public Point getSecondLastMove() {
         return secondLastMove.clone();
     }
 
-    public Point getLastMove(){
+    public Point getLastMove() {
         return lastMove.clone();
     }
 
-    public Set<Point> getLastCapturedSet(){
+    public Set<Point> getLastCapturedSet() {
         return new HashSet<>(lastCapturedSet);
     }
 
-    public int getBlackCaptures(){
+    public int getBlackCaptures() {
         return blackCaptures;
     }
 
-    public int getWhiteCaptures(){
+    public int getWhiteCaptures() {
         return whiteCaptures;
     }
 
-    public Set<Point> getBlackCapturedArea(){
+    public Set<Point> getBlackCapturedArea() {
         return new HashSet<>(blackCapturedArea);
     }
 
-    public Set<Point> getWhiteCapturedArea(){
+    public Set<Point> getWhiteCapturedArea() {
         return new HashSet<>(whiteCapturedArea);
     }
 
-    public PointType whoseMove(){
+    public PointType whoseMove() {
         return isBlack() ? PointType.BLACK : PointType.WHITE;
     }
 
-    public PointType whoseNotMove(){
+    public PointType whoseNotMove() {
         return !isBlack() ? PointType.BLACK : PointType.WHITE;
     }
 
     @Override
-    public PointType getWinner(){
-        if (lastMove.x() == -1 && lastMove.y() == -1 && secondLastMove.x() == -1 && secondLastMove.y() == -1 && secondLastMove.type() == whoseMove()){
+    public PointType getWinner() {
+        if (lastMove.x() == -1 && lastMove.y() == -1 && secondLastMove.x() == -1 && secondLastMove.y() == -1 && secondLastMove.type() == whoseMove()) {
             countArea();
             if (blackCapturedArea.size() > whiteCapturedArea.size()) winner = PointType.BLACK;
             else if (blackCapturedArea.size() < whiteCapturedArea.size()) winner = PointType.WHITE;

@@ -9,14 +9,14 @@ import java.io.File;
 
 public class SplashEkran extends JPanel implements MouseListener, MouseMotionListener, KeyListener, ActionListener {
 
+    private final SplashEkran self_ref = this;
     private BufferedImage image;
     private BufferedImage backgroundImage;
-
     private int sirina_slike = 500; // default
     private int visina_slike = 500; // default
-    private float visina, sirina;
-    private float default_size = 800.0f;
-    private final SplashEkran self_ref = this;
+    private final float visina;
+    private final float sirina;
+    private final float default_size = 800.0f;
 
     public SplashEkran(int sirina, int visina) {
         super();
@@ -28,8 +28,8 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
         requestFocus();
         this.visina = (float) visina;
         this.sirina = (float) sirina;
-        visina_slike = visina - (int)(300.0f/default_size * visina);
-        sirina_slike = sirina - (int)(300.0f/default_size * sirina);
+        visina_slike = visina - (int) (300.0f / default_size * visina);
+        sirina_slike = sirina - (int) (300.0f / default_size * sirina);
 
         try {
             // Load the PNG image from the file
@@ -50,12 +50,12 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
 
         setLayout(null);
 
-        CustomButton playCaptureGo = new CustomButton("Play Capture GO", (int) (50.0f / default_size * sirina), (int) (700.0f/default_size * visina), (int) (30/default_size * visina));
-        CustomButton playTraditionalGo = new CustomButton("Play Traditional GO", (int) (400.0f / default_size * sirina), (int) (700.0f/default_size * visina), (int) (30/default_size * visina));
+        CustomButton playCaptureGo = new CustomButton("Play Capture GO", (int) (50.0f / default_size * sirina), (int) (700.0f / default_size * visina), (int) (30 / default_size * visina));
+        CustomButton playTraditionalGo = new CustomButton("Play Traditional GO", (int) (400.0f / default_size * sirina), (int) (700.0f / default_size * visina), (int) (30 / default_size * visina));
         add(playCaptureGo);
         add(playTraditionalGo);
         setVisible(true);
-        System.out.println((int)( (float) 50 / default_size) * sirina);
+        System.out.println((int) ((float) 50 / default_size) * sirina);
 
         playCaptureGo.addActionListener(e -> {
             JPanel frame = (JPanel) self_ref.getParent();
@@ -87,7 +87,7 @@ public class SplashEkran extends JPanel implements MouseListener, MouseMotionLis
 
         g3d.setColor(Color.BLACK);
         g3d.setFont(new Font("SansSerif", Font.BOLD, (int) (70.0f / default_size * sirina)));
-        g3d.drawString("GAME OF GO", 175/default_size * sirina, 100/default_size * visina);
+        g3d.drawString("GAME OF GO", 175 / default_size * sirina, 100 / default_size * visina);
 
         setBackground(Color.WHITE);
     }

@@ -1,9 +1,11 @@
 package logika;
+
 import splosno.Poteza;
+
 import java.util.HashSet;
 import java.util.Set;
 
-public class Igra  {
+public class Igra {
 
     protected int board_size;
     protected Point[][] board;
@@ -12,7 +14,7 @@ public class Igra  {
     protected int totalBlackLiberties = 0;
     protected int totalWhiteLiberties = 0;
 
-    public Igra(int board_size){
+    public Igra(int board_size) {
         this.board_size = board_size;
         this.board = new Point[board_size][board_size];
         resetGame();
@@ -21,14 +23,14 @@ public class Igra  {
         //printCapture();
     }
 
-    protected Set<PointGroup> findAllGroups(){
+    protected Set<PointGroup> findAllGroups() {
         // Finds all groups on the board
         // Returns a set of PointGroups
         Set<PointGroup> groups = new HashSet<>();
         Set<Point> visitedPoints = new HashSet<>();
-        for (Point[] row : board){
-            for (Point p : row){
-                if (p.type() != PointType.EMPTY && !visitedPoints.contains(p)){
+        for (Point[] row : board) {
+            for (Point p : row) {
+                if (p.type() != PointType.EMPTY && !visitedPoints.contains(p)) {
                     PointGroup pg = new PointGroup(board, p, board_size, false);
                     groups.add(pg);
                     visitedPoints.addAll(pg.getGroup());
@@ -38,11 +40,11 @@ public class Igra  {
         return groups;
     }
 
-    public boolean odigraj(Poteza poteza){
+    public boolean odigraj(Poteza poteza) {
         //System.out.println("Playing move: " + poteza.x() + ", " + poteza.y() + " by " + (isBlack ? "black" : "white") + " player");
         Point p = board[poteza.x()][poteza.y()];
         boolean isPossible = p.type() == PointType.EMPTY;
-        if (isPossible){
+        if (isPossible) {
             PointType color = isBlack ? PointType.BLACK : PointType.WHITE;
             PointType anticolor = !isBlack ? PointType.BLACK : PointType.WHITE;
             p.setType(color);
@@ -50,7 +52,7 @@ public class Igra  {
             totalBlackLiberties = 0;
             totalWhiteLiberties = 0;
 
-            for (PointGroup pg : groups){
+            for (PointGroup pg : groups) {
                 int liberties = pg.getLiberties();
                 PointType groupType = pg.getGroupType();
 
@@ -70,8 +72,8 @@ public class Igra  {
         return isPossible;
     }
 
-    protected void randomlyFill(){
-        for (int i = 0; i < board_size; i++){
+    protected void randomlyFill() {
+        for (int i = 0; i < board_size; i++) {
             for (int j = 0; j < board_size; j++) {
                 PointType pt;
                 double rand = Math.random();
@@ -83,8 +85,8 @@ public class Igra  {
         }
     }
 
-    public void resetGame(){
-        for (int i = 0; i < board_size; i++){
+    public void resetGame() {
+        for (int i = 0; i < board_size; i++) {
             for (int j = 0; j < board_size; j++) {
                 board[i][j] = new Point(0, 0, i, j, PointType.EMPTY);
             }
@@ -92,26 +94,26 @@ public class Igra  {
         isBlack = true;
     }
 
-    public void printCapture(){
+    public void printCapture() {
         Set<PointGroup> groups = findAllGroups();
         System.out.println("All groups:" + groups.size());
-        for (PointGroup pg : groups){
-            if (pg.getLiberties() == 0){
+        for (PointGroup pg : groups) {
+            if (pg.getLiberties() == 0) {
                 System.out.println("Group with no liberties:");
                 pg.printGroupOnBoard();
             }
         }
     }
 
-    public void printGameState(){
+    public void printGameState() {
         System.out.println("Game state:");
         AsciiGridDisplay.printBoard(board, new HashSet<>());
 
     }
 
-    public void calcBoardCoordinates(int x_start, int y_start, int width, int height){
+    public void calcBoardCoordinates(int x_start, int y_start, int width, int height) {
         // For point on board, determine coordinates on canvas
-        for (int i = 0; i < board_size; i++){
+        for (int i = 0; i < board_size; i++) {
             for (int j = 0; j < board_size; j++) {
                 Point p = board[i][j];
                 p.set_x_coord(x_start + i * width / (board_size - 1));
@@ -120,31 +122,31 @@ public class Igra  {
         }
     }
 
-    public Point[][] getBoard(){
+    public Point[][] getBoard() {
         return board;
     }
 
-    public boolean isBlack(){
+    public boolean isBlack() {
         return isBlack;
     }
 
-    public PointType getWinner(){
+    public PointType getWinner() {
         return winner;
     }
 
-    public Set<Point> getPointsOfColor(PointType color){
+    public Set<Point> getPointsOfColor(PointType color) {
         Set<Point> points = new HashSet<>();
-        for (Point[] row : board){
-            for (Point p : row){
+        for (Point[] row : board) {
+            for (Point p : row) {
                 if (p.type() == color) points.add(p);
             }
         }
         return points;
     }
 
-    public void copyOf(Igra igra){
+    public void copyOf(Igra igra) {
         Point[][] new_board = new Point[board_size][board_size];
-        for (int i = 0; i < board_size; i++){
+        for (int i = 0; i < board_size; i++) {
             for (int j = 0; j < board_size; j++) {
                 new_board[i][j] = new Point(0, 0, i, j, igra.getBoard()[i][j].type());
             }
@@ -154,11 +156,11 @@ public class Igra  {
         this.winner = igra.getWinner();
     }
 
-    public int getTotalBlackLiberties(){
+    public int getTotalBlackLiberties() {
         return totalBlackLiberties;
     }
 
-    public int getTotalWhiteLiberties(){
+    public int getTotalWhiteLiberties() {
         return totalWhiteLiberties;
     }
 
