@@ -11,6 +11,11 @@ Repozitorij vsebuje kodo za zaključni projekt pri predmetu Programiranje 2 na F
 
 ---
 
+**Oddaja 23.6.2023:** V mapi `oddaja` se nahajajo vsi paketi. Datoteka `/oddaja/src/gui/okno` vsebuje metodo `main`, ki požene program.
+
+
+---
+
 
 **Tehnologije:** Java, paket [Java Swing](https://docs.oracle.com/javase/tutorial/uiswing/start/index.html)
 
