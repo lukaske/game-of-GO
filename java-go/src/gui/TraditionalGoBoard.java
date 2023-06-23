@@ -31,9 +31,11 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
     protected JLabel whiteAreaLabel = new JLabel("White score: 0");
 
     protected JButton start_game = new JButton("Start game");
+    protected JButton blackPass = new JButton("Black pass");
+    protected JButton whitePass = new JButton("White pass");
     protected JComboBox<String> blackPlayer = new JComboBox<>();
     protected JComboBox<String> whitePlayer = new JComboBox<>();
-    protected boolean isGameRunning = true;
+    protected boolean isGameRunning = false;
 
 
     public TraditionalGoBoard(int sirina, int visina, int board_size) {
@@ -72,12 +74,29 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         bottomToolbar.addSeparator();
         bottomToolbar.add(whiteAreaLabel, BorderLayout.CENTER);
 
-
         start_game.addActionListener(e -> {
             if (!isGameRunning) {
                 startGame();
             } else {
                 stopGame();
+            }
+        });
+
+        blackPass.addActionListener(e -> {
+            if (isGameRunning) {
+                if (isBlack) {
+                    Poteza poteza = new Poteza(-1, -1);
+                    playMove(poteza);
+                }
+            }
+        });
+
+        whitePass.addActionListener(e -> {
+            if (isGameRunning) {
+                if (!isBlack) {
+                    Poteza poteza = new Poteza(-1, -1);
+                    playMove(poteza);
+                }
             }
         });
 
@@ -177,6 +196,8 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         statusLabel.setText("Current player: " + currentPlayer);
         blackPlayer.setEnabled(false);
         whitePlayer.setEnabled(false);
+        topToolbar.add(blackPass);
+        topToolbar.add(whitePass);
         getGameState();
         repaint();
     }
@@ -189,8 +210,9 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         whitePlayer.setEnabled(true);
         blackAreaLabel.setText("Black score: 0");
         whiteAreaLabel.setText("White score: 0");
-
-        igra.resetGame();
+        topToolbar.remove(blackPass);
+        topToolbar.remove(whitePass);
+        igra = new IgraTraditional(board_size);
         getGameState();
         repaint();
     }
@@ -261,40 +283,10 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
             // Translate coordinates to board indexes
             int ix = (smallest_x_index - padding) / (cellWidth);
             int iy = (smallest_y_index - padding) / (cellHeight);
+
             Poteza poteza = new Poteza(ix, iy);
+            playMove(poteza);
 
-
-            if (winner == PointType.EMPTY){
-                boolean wasPlayed = igra.odigraj(poteza);
-
-                // If the move was played, get the get game state, update screen and check if the game is over
-                if (wasPlayed) {
-                    getGameState();
-
-                    // If we have a winner, display dialogue
-                    if (winner != PointType.EMPTY) {
-                        repaint();
-
-                        String winnerString = winner == PointType.BLACK ? "Black" : "White";
-                        Object[] options = { "New game", "Back to menu" };
-                        int action = JOptionPane.showOptionDialog(this, winnerString + " has captured and won!",
-                                "Game over!", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,
-                                new ImageIcon("./assets/cup.png"), options, options[0]);
-
-                        // Reset game and return to main menu if the user chooses to
-                        igra = new IgraTraditional(board_size);
-                        getGameState();
-                        setFocusable(true);
-                        if (action == 1) {
-                            JPanel frame = (JPanel) this.getParent();
-                            CardLayout cardLayout = (CardLayout) frame.getLayout();
-                            cardLayout.show(frame, "splash-ekran");
-                            frame.repaint();
-                        }
-                    }
-                    repaint();
-                }
-            }
         }
     }
 
@@ -315,6 +307,49 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
 
     @Override
     public void mouseMoved(MouseEvent e) {
+
+    }
+
+    public void playMove(Poteza poteza) {
+        if (winner == PointType.EMPTY){
+            boolean wasPlayed = igra.odigraj(poteza);
+            // If the move was played, get the get game state, update screen and check if the game is over
+            if (wasPlayed) {
+                getGameState();
+
+                // If we have a winner, display dialogue
+                if (winner != PointType.EMPTY) {
+                    repaint();
+                    String winnerString = "";
+                    if (winner == PointType.BLACK) {
+                        winnerString = "Congratulations! Black player has won.";
+                    } else if (winner == PointType.WHITE) {
+                        winnerString = "Congratulations! White player has won.";
+                    } else if (winner == PointType.NEUTRAL) {
+                        winnerString = "The match resulted in a tie.";
+                    }
+                    winnerString += "\nBlack captured area: " + blackScore + "\nWhite captured area: " + whiteScore;
+                    Object[] options = { "New game", "Back to menu" };
+                    int action = JOptionPane.showOptionDialog(this, winnerString,
+                            "Game over!", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,
+                            new ImageIcon("./assets/cup.png"), options, options[0]);
+
+                    // Reset game and return to main menu if the user chooses to
+                    stopGame();
+                    getGameState();
+                    setFocusable(true);
+                    if (action == 1) {
+                        JPanel frame = (JPanel) this.getParent();
+                        CardLayout cardLayout = (CardLayout) frame.getLayout();
+                        cardLayout.show(frame, "splash-ekran");
+                        frame.repaint();
+                    }
+                    else if (action == 0) {
+                    }
+                }
+                repaint();
+            }
+        }
 
     }
 }

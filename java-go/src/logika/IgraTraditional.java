@@ -82,7 +82,9 @@ public class IgraTraditional extends Igra {
             if (lastMove.x() == -1 && lastMove.y() == -1 && secondLastMove.x() == -1 && secondLastMove.y() == -1 && secondLastMove.type() == anticolor){
                 // COUNT AREA TO DETERMINE WINNER!
                 countArea();
-                winner = color;
+                if (blackCapturedArea.size() > whiteCapturedArea.size()) winner = PointType.BLACK;
+                else if (blackCapturedArea.size() < whiteCapturedArea.size()) winner = PointType.WHITE;
+                else winner = PointType.NEUTRAL;
             }
 
             isBlack = !isBlack;
