@@ -14,8 +14,9 @@ public class Okno extends JFrame implements ActionListener {
     private final JMenuItem navodilaCaptureGo;
     private final JMenuItem gitHubLink;
     private final JMenuItem endGame;
-    protected int sirina = 720;
-    protected int visina = 750;
+
+    protected int sirina = 640;
+    protected int visina = 670;
     protected int board_size = 9;
     protected CardLayout cardLayout;
     protected JPanel panel;
@@ -49,8 +50,6 @@ public class Okno extends JFrame implements ActionListener {
         JMenu menuIgra = dodajMenu(menubar, "Game");
         endGame = dodajMenuItem(menuIgra, "Exit to main menu");
 
-
-        JMenu menuNastavitve = dodajMenu(menubar, "Settings");
 
         JMenu menuOProgramu = dodajMenu(menubar, "About");
         navodilaCaptureGo = dodajMenuItem(menuOProgramu, "How to play Capture Go");
@@ -118,16 +117,6 @@ public class Okno extends JFrame implements ActionListener {
             panel.repaint();
         }
 
-    }
-
-    public void changeView(String viewName) {
-        try {
-            cardLayout.show(panel, viewName);
-            panel.revalidate();
-            panel.repaint();
-        } catch (Exception e) {
-            System.out.println("View does not exist");
-        }
     }
 
 }

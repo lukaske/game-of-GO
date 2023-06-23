@@ -386,7 +386,7 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
                     } else if (winner == PointType.WHITE) {
                         winnerString = "Congratulations! White player has won.";
                     } else if (winner == PointType.NEUTRAL) {
-                        winnerString = "The match resulted in a tie.";
+                        winnerString = "The has match resulted in a tie.";
                     }
                     winnerString += "\nBlack captured area: " + blackScore + "\nWhite captured area: " + whiteScore;
                     Object[] options = {"New game", "Back to menu"};
