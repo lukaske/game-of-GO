@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class Okno extends JFrame implements ActionListener{
+public class Okno extends JFrame implements ActionListener {
 
     protected int sirina = 720;
     protected int visina = 750;
@@ -18,10 +18,11 @@ public class Okno extends JFrame implements ActionListener{
     protected CaptureGoBoard captureGoBoard;
     protected TraditionalGoBoardChild traditionalGoBoard;
     protected SplashEkran splashEkran;
-    boolean showSplashScreen = true;
 
-    private JMenuItem navodilaGo, navodilaCaptureGo, gitHubLink;
-    private JMenuItem endGame;
+    private final JMenuItem navodilaGo;
+    private final JMenuItem navodilaCaptureGo;
+    private final JMenuItem gitHubLink;
+    private final JMenuItem endGame;
 
 
     public Okno() {
@@ -61,6 +62,12 @@ public class Okno extends JFrame implements ActionListener{
 
     }
 
+    public static void main(String[] args) {
+        Okno okno = new Okno();
+        okno.pack();
+        okno.setVisible(true);
+    }
+
     private JMenu dodajMenu(JMenuBar menubar, String naslov) {
         JMenu menu = new JMenu(naslov);
         menubar.add(menu);
@@ -87,8 +94,7 @@ public class Okno extends JFrame implements ActionListener{
                 }
             }
 
-        }
-        else if (objekt == navodilaGo) {
+        } else if (objekt == navodilaGo) {
             if (Desktop.isDesktopSupported()) {
                 try {
                     File myFile = new File("./assets/go.pdf");
@@ -97,15 +103,14 @@ public class Okno extends JFrame implements ActionListener{
                     // no application registered for PDFs
                 }
             }
-        }
-        else if (objekt == gitHubLink) {
+        } else if (objekt == gitHubLink) {
             if (Desktop.isDesktopSupported()) {
                 try {
                     Desktop.getDesktop().browse(new URL("https://github.com/lukaske/programiranje2-projekt").toURI());
-                } catch (Exception ex) {}
+                } catch (Exception ex) {
+                }
             }
-        }
-        else if (objekt == endGame) {
+        } else if (objekt == endGame) {
             System.out.println(panel.getComponentCount());
             cardLayout.show(panel, "splash-ekran");
             captureGoBoard.resetBoard();
@@ -116,15 +121,8 @@ public class Okno extends JFrame implements ActionListener{
 
     }
 
-    // Meant for testing
-    public static void main(String[] args) {
-        Okno okno = new Okno();
-        okno.pack();
-        okno.setVisible(true);
-    }
-
     public void changeView(String viewName) {
-        try{
+        try {
             cardLayout.show(panel, viewName);
             panel.revalidate();
             panel.repaint();

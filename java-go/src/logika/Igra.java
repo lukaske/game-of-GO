@@ -162,8 +162,4 @@ public class Igra  {
         return totalWhiteLiberties;
     }
 
-    public static void main(String[] args) {
-        Igra igra = new Igra(9);
-    }
-
 }

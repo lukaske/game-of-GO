@@ -140,9 +140,4 @@ public class Inteligenca extends splosno.KdoIgra {
         igra.printCapture();
     }
 
-    public static void main(String[] args){
-        Inteligenca inteligenca = new Inteligenca(9);
-        inteligenca.playWithItself();
-    }
-
 }
