@@ -47,12 +47,10 @@ public class CaptureGoBoard extends JPanel implements MouseListener, MouseMotion
 
         topToolbar.add(new JLabel("Black: "));
         blackPlayer.addItem("Human");
-        blackPlayer.addItem("Computer (MCTS)");
         topToolbar.add(blackPlayer);
 
         topToolbar.add(new JLabel("White: "));
         whitePlayer.addItem("Human");
-        whitePlayer.addItem("Computer (MCTS)");
         topToolbar.add(whitePlayer);
 
 
