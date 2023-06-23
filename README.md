@@ -20,6 +20,6 @@ Repozitorij vsebuje kodo za zaključni projekt pri predmetu Programiranje 2 na F
 ---
 
 
-**Tehnologije:** Java, paket [Java Swing](https://docs.oracle.com/javase/tutorial/uiswing/start/index.html)
+**Tehnologije:** Java, paket [Java Swing](https://docs.oracle.com/javase/tutorial/uiswing/start/index.html), naslovna slika [DALL-E-2](https://openai.com/dall-e-2)
 
 **Ekipa:** [Luka Skeledžija](https://github.com/lukaske)
