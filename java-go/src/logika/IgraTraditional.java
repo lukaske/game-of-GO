@@ -20,7 +20,6 @@ public class IgraTraditional extends Igra {
     public IgraTraditional(int board_size){
         super(board_size);
         lastMove = board[0][0];
-        System.out.println("Traditional game initialized");
     }
 
     public Set<Point> disallowedMoves(PointType playerColor, boolean allowedMovesOnly){
@@ -67,7 +66,7 @@ public class IgraTraditional extends Igra {
                 }
             }
         }
-        allowedMoves.add(new Point(-1, -1, -1, -1, playerColor));
+        allowedMoves.add(new Point(-1, -1, -1, -1, PointType.EMPTY));
         if (allowedMovesOnly) return allowedMoves;
         else return disallowedMoves;
     }
@@ -80,13 +79,7 @@ public class IgraTraditional extends Igra {
             secondLastMove = lastMove.clone();
             lastMove = new Point(-1, -1, -1, -1, color);
 
-            if (lastMove.x() == -1 && lastMove.y() == -1 && secondLastMove.x() == -1 && secondLastMove.y() == -1 && secondLastMove.type() == anticolor){
-                // COUNT AREA TO DETERMINE WINNER!
-                countArea();
-                if (blackCapturedArea.size() > whiteCapturedArea.size()) winner = PointType.BLACK;
-                else if (blackCapturedArea.size() < whiteCapturedArea.size()) winner = PointType.WHITE;
-                else winner = PointType.NEUTRAL;
-            }
+            getWinner();
 
             isBlack = !isBlack;
             return true;
@@ -139,7 +132,6 @@ public class IgraTraditional extends Igra {
     }
 
     protected void countArea(){
-        System.out.println("Counting area");
         Set<PointGroup> groups = new HashSet<>();
         Set<Point> visitedPoints = new HashSet<>();
         whiteCapturedArea = new HashSet<>();
@@ -180,5 +172,78 @@ public class IgraTraditional extends Igra {
         blackCaptures = 0;
         whiteCaptures = 0;
         countArea();
+    }
+
+    public boolean isGameOver(){
+        return (winner == PointType.NEUTRAL || winner == PointType.BLACK || winner == PointType.WHITE);
+    }
+
+    public void copyTraditional(IgraTraditional igra){
+        Point[][] new_board = new Point[board_size][board_size];
+        for (int i = 0; i < board_size; i++){
+            for (int j = 0; j < board_size; j++) {
+                new_board[i][j] = new Point(0, 0, i, j, igra.getBoard()[i][j].type());
+            }
+        }
+        this.board = new_board;
+        this.isBlack = igra.isBlack();
+        this.winner = igra.getWinner();
+        this.lastMove = igra.getLastMove();
+        this.secondLastMove = igra.getSecondLastMove();
+        this.lastCapturedSet = igra.getLastCapturedSet();
+        this.blackCaptures = igra.getBlackCaptures();
+        this.whiteCaptures = igra.getWhiteCaptures();
+        this.blackCapturedArea = igra.getBlackCapturedArea();
+        this.whiteCapturedArea = igra.getWhiteCapturedArea();
+        this.totalBlackLiberties = igra.getTotalBlackLiberties();
+        this.totalWhiteLiberties = igra.getTotalWhiteLiberties();
+
+    }
+
+    public Point getSecondLastMove(){
+        return secondLastMove.clone();
+    }
+
+    public Point getLastMove(){
+        return lastMove.clone();
+    }
+
+    public Set<Point> getLastCapturedSet(){
+        return new HashSet<>(lastCapturedSet);
+    }
+
+    public int getBlackCaptures(){
+        return blackCaptures;
+    }
+
+    public int getWhiteCaptures(){
+        return whiteCaptures;
+    }
+
+    public Set<Point> getBlackCapturedArea(){
+        return new HashSet<>(blackCapturedArea);
+    }
+
+    public Set<Point> getWhiteCapturedArea(){
+        return new HashSet<>(whiteCapturedArea);
+    }
+
+    public PointType whoseMove(){
+        return isBlack() ? PointType.BLACK : PointType.WHITE;
+    }
+
+    public PointType whoseNotMove(){
+        return !isBlack() ? PointType.BLACK : PointType.WHITE;
+    }
+
+    @Override
+    public PointType getWinner(){
+        if (lastMove.x() == -1 && lastMove.y() == -1 && secondLastMove.x() == -1 && secondLastMove.y() == -1 && secondLastMove.type() == whoseMove()){
+            countArea();
+            if (blackCapturedArea.size() > whiteCapturedArea.size()) winner = PointType.BLACK;
+            else if (blackCapturedArea.size() < whiteCapturedArea.size()) winner = PointType.WHITE;
+            else winner = PointType.NEUTRAL;
+        }
+        return winner;
     }
 }

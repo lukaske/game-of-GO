@@ -58,7 +58,6 @@ public class PointGroup {
 
     public void printGroupOnBoard(){
         AsciiGridDisplay.printBoard(board, group);
-        System.out.println("Liberties: " + getLiberties());
     }
 
     public Point getStartingPoint(){

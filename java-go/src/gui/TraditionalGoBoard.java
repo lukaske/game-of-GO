@@ -23,16 +23,22 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
     protected boolean isBlack;
     protected int blackScore;
     protected int whiteScore;
+    protected int whitesCaptures;
+    protected int blacksCaptures;
     protected boolean isGameRunning = false;
     protected boolean isBlackHuman = true;
     protected boolean isWhiteHuman = true;
-    protected MCTS intelligentAgent = new MCTS(board_size);
+    protected MCTS intelligentAgent;
+    protected boolean isThreadRunning;
 
     protected final JToolBar topToolbar = new JToolBar();
     protected final JToolBar bottomToolbar = new JToolBar();
     protected JLabel statusLabel = new JLabel("Select player roles");
-    protected JLabel blackAreaLabel = new JLabel("Black score: 0");
-    protected JLabel whiteAreaLabel = new JLabel("White score: 0");
+    protected JLabel blackAreaLabel = new JLabel("Black area: 0");
+    protected JLabel whiteAreaLabel = new JLabel("White area: 0");
+    protected JLabel blackCapturesLabel = new JLabel("Black's captures: 0");
+    protected JLabel whiteCapturesLabel = new JLabel("White's captures: 0");
+
     protected JButton start_game = new JButton("Start game");
     protected JButton blackPass = new JButton("Black pass");
     protected JButton whitePass = new JButton("White pass");
@@ -74,6 +80,10 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         bottomToolbar.add(blackAreaLabel, BorderLayout.CENTER);
         bottomToolbar.addSeparator();
         bottomToolbar.add(whiteAreaLabel, BorderLayout.CENTER);
+        bottomToolbar.addSeparator();
+        bottomToolbar.add(blackCapturesLabel, BorderLayout.CENTER);
+        bottomToolbar.addSeparator();
+        bottomToolbar.add(whiteCapturesLabel, BorderLayout.CENTER);
 
         start_game.addActionListener(e -> {
             if (!isGameRunning) {
@@ -103,6 +113,7 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
 
         this.board_size = board_size;
         this.igra = new IgraTraditional(board_size);
+        this.intelligentAgent = new MCTS(board_size);
         getGameState();
         repaint();
     }
@@ -178,6 +189,8 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
             statusLabel.setText("Current player: " + currentPlayer);
             blackAreaLabel.setText("Black area: " + blackScore);
             whiteAreaLabel.setText("White area: " + whiteScore);
+            blackCapturesLabel.setText("Black's captures: " + blacksCaptures);
+            whiteCapturesLabel.setText("White's captures: " + whitesCaptures);
         }
     }
 
@@ -188,6 +201,8 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         isBlack = igra.isBlack();
         blackScore = igra.getBlackArea();
         whiteScore = igra.getWhiteArea();
+        whitesCaptures = igra.getBlackCaptures();
+        blacksCaptures = igra.getWhiteCaptures();
     }
 
     protected void startGame(){
@@ -197,21 +212,36 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         statusLabel.setText("Current player: " + currentPlayer);
         blackPlayer.setEnabled(false);
         whitePlayer.setEnabled(false);
-        topToolbar.add(blackPass);
-        topToolbar.add(whitePass);
         isBlackHuman = blackPlayer.getSelectedItem().toString().equals("Human");
         isWhiteHuman = whitePlayer.getSelectedItem().toString().equals("Human");
+
         igra = new IgraTraditional(board_size);
         getGameState();
         repaint();
 
+        if (isBlackHuman) topToolbar.add(blackPass);
+        if (isWhiteHuman) topToolbar.add(whitePass);
+
+        if (!isBlackHuman || !isWhiteHuman){
+            isThreadRunning = true;
+        }
+
         if (!isBlackHuman){
-            Poteza p = intelligentAgent.izberiPotezo(igra);
-            playMove(p);
+
+            SwingUtilities.invokeLater(() -> {
+                if (isThreadRunning){
+                    Poteza p = intelligentAgent.izberiPotezo(igra);
+                    playMove(p);
+                }
+            });
+
+            statusLabel.setText("Current player: " + currentPlayer);
+            repaint();
         }
     }
 
     protected void stopGame(){
+        isThreadRunning = false;
         isGameRunning = false;
         start_game.setText("Start game");
         statusLabel.setText("Select player roles");
@@ -265,9 +295,6 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         int smallest_dist_y = height;
         int smallest_y_index = -1;
 
-        System.out.println("x_mouse: " + x_mouse);
-        System.out.println("y_mouse: " + y_mouse);
-
         // Check if the click is within the board
         int expanded_pad = padding - 20;
         if(x_mouse < expanded_pad || x_mouse > width - expanded_pad || y_mouse < expanded_pad || y_mouse > height - expanded_pad) {
@@ -320,7 +347,7 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
     }
 
     public void playMove(Poteza poteza) {
-        if (winner == PointType.EMPTY){
+        if (!igra.isGameOver()){
             boolean wasPlayed = igra.odigraj(poteza);
             // If the move was played, get the get game state, update screen and check if the game is over
             if (wasPlayed) {
@@ -353,21 +380,48 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
                         cardLayout.show(frame, "splash-ekran");
                         frame.repaint();
                     }
-                    else if (action == 0) {
-                    }
                 }
                 repaint();
             }
-
-            if (isBlack && !isBlackHuman){
-                Poteza p = intelligentAgent.izberiPotezo(igra);
-                playMove(p);
-            }
-            else if (!isBlack && !isWhiteHuman){
-                Poteza p = intelligentAgent.izberiPotezo(igra);
-                playMove(p);
+            if (!isWhiteHuman || !isBlackHuman){
+                intelligentMove(igra, board_size, this);
             }
         }
 
+    }
+
+    public static void intelligentMove(IgraTraditional igra, int board_size, TraditionalGoBoard gui){
+        SwingWorker<Poteza, Void> worker = new SwingWorker<Poteza, Void>() {
+            @Override
+            protected Poteza doInBackground() throws Exception {
+                MCTS intelligentAgent = new MCTS(board_size);
+                Poteza p = null;
+                try{
+                    if (gui.isBlack && !gui.isBlackHuman && gui.isThreadRunning){
+                        p = intelligentAgent.izberiPotezo(igra);
+                    }
+                    else if (!gui.isBlack && !gui.isWhiteHuman && gui.isThreadRunning){
+                        p = intelligentAgent.izberiPotezo(igra);
+                    }
+                } catch (Exception ignored) {}
+                return p;
+            }
+            @Override
+            protected void done() {
+                // This is called when the background thread finishes
+                try{
+                    Poteza p = new Poteza(-10,-10);
+                    Poteza q = new Poteza(-10,-10);
+                    try {p = get();} catch (Exception ignored) {};
+                    if (p != null && !p.equals(q) && gui.isThreadRunning){
+                        gui.playMove(p);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        worker.execute();
     }
 }
