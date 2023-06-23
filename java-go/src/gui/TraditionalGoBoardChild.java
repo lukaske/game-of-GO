@@ -15,7 +15,7 @@ public class TraditionalGoBoardChild extends TraditionalGoBoard {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         PointType color = isBlack ? PointType.BLACK : PointType.WHITE;
-        for (logika.Point p : igra.disallowedMoves(color)) {
+        for (logika.Point p : igra.disallowedMoves(color, false)) {
             g.setColor(Color.RED);
             g.fillOval(p.x_coord() - (10 / 2), p.y_coord() - (10 / 2), 10, 10);
         }

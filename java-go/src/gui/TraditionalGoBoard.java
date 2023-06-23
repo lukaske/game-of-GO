@@ -1,6 +1,6 @@
 package gui;
 
-import logika.Igra;
+import inteligenca.MCTS;
 import logika.IgraTraditional;
 import logika.PointType;
 import splosno.Poteza;
@@ -23,19 +23,21 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
     protected boolean isBlack;
     protected int blackScore;
     protected int whiteScore;
+    protected boolean isGameRunning = false;
+    protected boolean isBlackHuman = true;
+    protected boolean isWhiteHuman = true;
+    protected MCTS intelligentAgent = new MCTS(board_size);
+
     protected final JToolBar topToolbar = new JToolBar();
     protected final JToolBar bottomToolbar = new JToolBar();
-
     protected JLabel statusLabel = new JLabel("Select player roles");
     protected JLabel blackAreaLabel = new JLabel("Black score: 0");
     protected JLabel whiteAreaLabel = new JLabel("White score: 0");
-
     protected JButton start_game = new JButton("Start game");
     protected JButton blackPass = new JButton("Black pass");
     protected JButton whitePass = new JButton("White pass");
     protected JComboBox<String> blackPlayer = new JComboBox<>();
     protected JComboBox<String> whitePlayer = new JComboBox<>();
-    protected boolean isGameRunning = false;
 
 
     public TraditionalGoBoard(int sirina, int visina, int board_size) {
@@ -53,7 +55,6 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         topToolbar.add(start_game);
         topToolbar.addSeparator();
         topToolbar.add(statusLabel);
-        topToolbar.addSeparator();
 
         topToolbar.add(new JLabel("Black: "));
         blackPlayer.addItem("Human");
@@ -198,8 +199,16 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         whitePlayer.setEnabled(false);
         topToolbar.add(blackPass);
         topToolbar.add(whitePass);
+        isBlackHuman = blackPlayer.getSelectedItem().toString().equals("Human");
+        isWhiteHuman = whitePlayer.getSelectedItem().toString().equals("Human");
+        igra = new IgraTraditional(board_size);
         getGameState();
         repaint();
+
+        if (!isBlackHuman){
+            Poteza p = intelligentAgent.izberiPotezo(igra);
+            playMove(p);
+        }
     }
 
     protected void stopGame(){
@@ -348,6 +357,15 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
                     }
                 }
                 repaint();
+            }
+
+            if (isBlack && !isBlackHuman){
+                Poteza p = intelligentAgent.izberiPotezo(igra);
+                playMove(p);
+            }
+            else if (!isBlack && !isWhiteHuman){
+                Poteza p = intelligentAgent.izberiPotezo(igra);
+                playMove(p);
             }
         }
 

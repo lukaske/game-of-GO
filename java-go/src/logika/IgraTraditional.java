@@ -23,7 +23,7 @@ public class IgraTraditional extends Igra {
         System.out.println("Traditional game initialized");
     }
 
-    public Set<Point> disallowedMoves(PointType playerColor){
+    public Set<Point> disallowedMoves(PointType playerColor, boolean allowedMovesOnly){
         Set<Point> allowedMoves = new HashSet<>();
         Set<Point> disallowedMoves = new HashSet<>();
 
@@ -67,8 +67,9 @@ public class IgraTraditional extends Igra {
                 }
             }
         }
-
-        return disallowedMoves;
+        allowedMoves.add(new Point(-1, -1, -1, -1, playerColor));
+        if (allowedMovesOnly) return allowedMoves;
+        else return disallowedMoves;
     }
 
     @Override
@@ -133,8 +134,7 @@ public class IgraTraditional extends Igra {
 
     protected boolean isAllowedMove(Point p, PointType color){
         if (p.type() != PointType.EMPTY) return false;
-        Set<Point> disallowedMoves = disallowedMoves(color);
-        System.out.println(disallowedMoves);
+        Set<Point> disallowedMoves = disallowedMoves(color, false);
         return !disallowedMoves.contains(p);
     }
 
