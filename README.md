@@ -13,9 +13,7 @@ Repozitorij vsebuje kodo za zaključni projekt pri predmetu Programiranje 2 na F
 
 **Oddaja 23.6.2023:** V mapi `oddaja` se nahajajo vsi paketi. Datoteka `/oddaja/src/gui/okno` vsebuje metodo `main`, ki požene program.
 
-![Splash Screen](https://raw.githubusercontent.com/lukaske/programiranje2-projekt/main/readme/screen.png)
-![Game of Go](https://raw.githubusercontent.com/lukaske/programiranje2-projekt/main/readme/game.png)
-
+![Game Of GO](https://raw.githubusercontent.com/lukaske/programiranje2-projekt/main/readme/screen.png)
 
 ---
 
