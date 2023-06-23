@@ -29,7 +29,7 @@ public class Igra  {
         for (Point[] row : board){
             for (Point p : row){
                 if (p.type() != PointType.EMPTY && !visitedPoints.contains(p)){
-                    PointGroup pg = new PointGroup(board, p, board_size);
+                    PointGroup pg = new PointGroup(board, p, board_size, false);
                     groups.add(pg);
                     visitedPoints.addAll(pg.getGroup());
                 }

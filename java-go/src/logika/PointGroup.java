@@ -9,15 +9,19 @@ public class PointGroup {
     private final Set<Point> group;
     private final Set<Point> liberties;
     private final PointType groupType;
+    private final Set<Point> blackNeighbors;
+    private final Set<Point> whiteNeighbors;
     private final int board_size;
 
-    public PointGroup(Point[][] board, Point p, int board_size){
+    public PointGroup(Point[][] board, Point p, int board_size, boolean allowEmpty){
         this.board = board;
         this.startingPoint = p;
         this.groupType = p.type();
         this.liberties = new HashSet<>();
+        this.blackNeighbors = new HashSet<>();
+        this.whiteNeighbors = new HashSet<>();
         this.board_size = board_size;
-        if (p.type() != PointType.EMPTY) this.group = getGroup(p, new HashSet<>());
+        if (p.type() != PointType.EMPTY || allowEmpty) this.group = getGroup(p, new HashSet<>());
         else this.group = new HashSet<>();
     }
 
@@ -38,6 +42,10 @@ public class PointGroup {
             int y1 = to_visit[i][1];
             if (x1 >= 0 && x1 < board_size && y1 >= 0 && y1 < board_size){
                 Point p1 = board[x1][y1];
+
+                if (pt == PointType.EMPTY && p1.type() == PointType.BLACK) blackNeighbors.addAll(existing_group);
+                else if (pt == PointType.EMPTY && p1.type() == PointType.WHITE) whiteNeighbors.addAll(existing_group);
+
                 if (p1.type() == pt && !existing_group.contains(p1)){
                     existing_group.addAll(getGroup(p1, existing_group));
                 } else if (p1.type() == PointType.EMPTY && !existing_group.contains(p1)){
@@ -67,6 +75,10 @@ public class PointGroup {
 
     public Set<Point> getGroup(){
         return this.group;
+    }
+
+    public AreaCount estimateArea(){
+        return new AreaCount(blackNeighbors, whiteNeighbors);
     }
 
     @Override

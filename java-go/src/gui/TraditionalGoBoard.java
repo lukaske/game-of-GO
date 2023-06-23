@@ -21,8 +21,15 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
     protected Set<logika.Point> whiteStones;
     protected PointType winner;
     protected boolean isBlack;
+    protected int blackScore;
+    protected int whiteScore;
     protected final JToolBar topToolbar = new JToolBar();
+    protected final JToolBar bottomToolbar = new JToolBar();
+
     protected JLabel statusLabel = new JLabel("Select player roles");
+    protected JLabel blackAreaLabel = new JLabel("Black score: 0");
+    protected JLabel whiteAreaLabel = new JLabel("White score: 0");
+
     protected JButton start_game = new JButton("Start game");
     protected JComboBox<String> blackPlayer = new JComboBox<>();
     protected JComboBox<String> whitePlayer = new JComboBox<>();
@@ -55,6 +62,15 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         whitePlayer.addItem("Human");
         whitePlayer.addItem("Computer (MCTS)");
         topToolbar.add(whitePlayer);
+
+        bottomToolbar.setFloatable(false);
+        bottomToolbar.setLayout(new FlowLayout(FlowLayout.CENTER));
+        add(bottomToolbar, BorderLayout.NORTH);
+        bottomToolbar.add(statusLabel, BorderLayout.CENTER);
+        bottomToolbar.addSeparator();
+        bottomToolbar.add(blackAreaLabel, BorderLayout.CENTER);
+        bottomToolbar.addSeparator();
+        bottomToolbar.add(whiteAreaLabel, BorderLayout.CENTER);
 
 
         start_game.addActionListener(e -> {
@@ -138,14 +154,10 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         }
 
         String currentPlayer = isBlack ? "BLACK" : "WHITE";
-        Color color = isBlack ? Color.BLACK : Color.WHITE;
-        g.setColor(color);
-        g.drawString(currentPlayer, 410, 785);
-        // Paint over the old string, change color only for BLACK/WHITE text
-        g.setColor(Color.DARK_GRAY);
-        g.drawString("Current player: ", 310, 785);
         if (isGameRunning){
             statusLabel.setText("Current player: " + currentPlayer);
+            blackAreaLabel.setText("Black area: " + blackScore);
+            whiteAreaLabel.setText("White area: " + whiteScore);
         }
     }
 
@@ -154,6 +166,8 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         whiteStones = igra.getPointsOfColor(PointType.WHITE);
         winner = igra.getWinner();
         isBlack = igra.isBlack();
+        blackScore = igra.getBlackArea();
+        whiteScore = igra.getWhiteArea();
     }
 
     protected void startGame(){
@@ -173,6 +187,9 @@ public class TraditionalGoBoard extends JPanel implements MouseListener, MouseMo
         statusLabel.setText("Select player roles");
         blackPlayer.setEnabled(true);
         whitePlayer.setEnabled(true);
+        blackAreaLabel.setText("Black score: 0");
+        whiteAreaLabel.setText("White score: 0");
+
         igra.resetGame();
         getGameState();
         repaint();
