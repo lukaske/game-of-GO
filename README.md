@@ -8,7 +8,7 @@ This repository contains the code for the final project in the Programming 2 cou
 
 ![Game Of GO](https://raw.githubusercontent.com/lukaske/programiranje2-projekt/main/readme/screen.png)
 
-  > rest of README in 🇸🇮
+  > the rest of README in 🇸🇮
 
 ---
 ## Programiranje 2: Zaključni projekt
