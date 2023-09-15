@@ -6,8 +6,10 @@ This repository contains the code for the final project in the Programming 2 cou
 2. Artificial intelligence for playing the game Go
 3. A professional application (GUI) for playing the game of Go and First Capture Go.
 
----
+![Game Of GO](https://raw.githubusercontent.com/lukaske/programiranje2-projekt/main/readme/screen.png)
 
+---
+(continuing in 🇸🇮)
 ## Programiranje 2: Zaključni projekt
 
 Repozitorij vsebuje kodo za zaključni projekt pri predmetu Programiranje 2 na Fakulteti za matematiko in fiziko. V okviru zaključnega projekta bomo izdelali: 
@@ -23,7 +25,6 @@ Repozitorij vsebuje kodo za zaključni projekt pri predmetu Programiranje 2 na F
 
 **Oddaja 23.6.2023:** V mapi `oddaja` se nahajajo vsi paketi. Datoteka `/oddaja/src/gui/okno` vsebuje metodo `main`, ki požene program.
 
-![Game Of GO](https://raw.githubusercontent.com/lukaske/programiranje2-projekt/main/readme/screen.png)
 
 ---
 
