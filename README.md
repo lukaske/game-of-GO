@@ -9,7 +9,7 @@ This repository contains the code for the final project in the Programming 2 cou
 ![Game Of GO](https://raw.githubusercontent.com/lukaske/programiranje2-projekt/main/readme/screen.png)
 
 ---
-(continuing in 🇸🇮)
+  > continuing in 🇸🇮
 ## Programiranje 2: Zaključni projekt
 
 Repozitorij vsebuje kodo za zaključni projekt pri predmetu Programiranje 2 na Fakulteti za matematiko in fiziko. V okviru zaključnega projekta bomo izdelali: 
