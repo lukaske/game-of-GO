@@ -3,7 +3,7 @@
 This repository contains the code for the final project in the Programming 2 course at the Faculty of Mathematics and Physics. As part of the final project, we created:
 
 1. Artificial intelligence for playing the game First Capture Go (based on Alpha-Beta pruning algorithm)
-2. Artificial intelligence for playing the game Go (upgraded to a MCTS based algorithm)
+2. Artificial intelligence for playing the game Go (based on a MCTS based algorithm)
 3. A professional application (GUI) for playing the game of Go and First Capture Go.
 
 ![Game Of GO](https://raw.githubusercontent.com/lukaske/programiranje2-projekt/main/readme/screen.png)
